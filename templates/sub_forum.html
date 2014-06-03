@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sub-forum</title>
+</head>
+<body>
+
+{% if threads %}
+    <ul>
+    {% for thread in threads %}
+        <li>
+            <a href="{{ thread.get_url }}">{{ thread.title }}</a> by {{ thread.user }}<br />
+            Created in {{ thread.date_created }}<br />
+            {{ thread.text|truncatechars:5 }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No threads.</p>
+{% endif %}
+
+</body>
+</html>
