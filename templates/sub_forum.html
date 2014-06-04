@@ -2,15 +2,20 @@
 
 {% block content %}
 {% if threads %}
-    <ul>
+    <table>
     {% for thread in threads %}
-        <li>
-            <a href="{{ thread.get_url }}">{{ thread.title }}</a> by {{ thread.user }}<br />
-            Created in {{ thread.date_created }}<br />
-            {{ thread.text|truncatechars:5 }}
-        </li>
+        <tr>
+            <th><a href="{{ thread.get_url }}">{{ thread.title }}</a></th>
+            <th>by {{ thread.user }}</th>
+            <th>Created in {{ thread.date_created }}</th>
+
+        </tr>
+        <tr>
+            <td colspan="2">{{ thread.text|truncatechars:20 }}</td>
+            <td>Last comment: {{ thread.get_last_post.text|truncatechars:10 }}</td>
+        </tr>
     {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>No threads.</p>
 {% endif %}

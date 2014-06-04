@@ -8,11 +8,16 @@
 <body>
 
 <p id="Menu">
-{% if user.is_authenticated %}
-    Welcome, {{ user }} ( <a href="{% url 'logout' %}">logout</a> )
-{% else %}
-    <a href="{% url 'login' %}">Login</a>
-{% endif %}
+<span>
+    <a href="{% url 'index' %}">home</a>
+</span>
+<span>
+    {% if user.is_authenticated %}
+        Welcome, <a href="{% url 'user_page' user.username %}">{{ user }}</a> ( <a href="{% url 'logout' %}">logout</a> )
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</span>
 </p>
 
 

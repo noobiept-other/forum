@@ -12,7 +12,7 @@
                 <tr>
                     <td><a href="{{ subforum.get_url }}">{{ subforum.name }}</a></td>
                     <td>threads: {{ subforum.thread_set.all|length }}</td>
-                    <td>latest post</td>
+                    <td>latest post: {{ subforum.get_last_post|truncatechars:10 }} by {{ subforum.get_last_post.user }}</td>
                 </tr>
             {% endfor %}
             </table>

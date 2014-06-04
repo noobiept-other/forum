@@ -24,6 +24,17 @@ class SubForum( models.Model ):
     def get_url(self):
         return reverse( 'subForum', args= [ self.slug ] )
 
+    def get_last_post(self):
+
+        try:
+            latest = self.post_set.latest( 'date_created' )
+
+        except Post.DoesNotExist:
+            latest = self.thread_set.latest( 'date_created' )
+
+        return latest
+
+
 
 class Thread( models.Model ):
 
@@ -40,9 +51,20 @@ class Thread( models.Model ):
     def get_url(self):
         return reverse( 'thread', args= [ self.sub_forum.slug, self.slug ] )
 
+    def get_last_post(self):
+
+        try:
+            latest = self.post_set.latest( 'date_created' )
+
+        except Post.DoesNotExist:
+            latest = None
+
+        return latest
+
 
 class Post( models.Model ):
 
+    sub_forum = models.ForeignKey( SubForum )
     thread = models.ForeignKey( Thread )
     user = models.ForeignKey( User )
     text = models.TextField( max_length= 1000 )
