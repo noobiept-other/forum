@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forum</title>
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}style.css" />
+</head>
+<body>
+
+<p id="Menu">
+{% if user.is_authenticated %}
+    Welcome, {{ user }} ( <a href="{% url 'logout' %}">logout</a> )
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+{% endif %}
+</p>
+
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

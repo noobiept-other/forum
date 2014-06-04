@@ -10,7 +10,12 @@ urlpatterns = patterns('',
 
     url( r'^forum/(?P<forumSlug>[\w-]+)/?$', 'forum.views.sub_forum', name= 'subForum' ),
 
-    url( r'^forum/(?P<forumSlug>[\w-]+)/(?P<threadSlug>[\w-]+)/?$', 'forum.views.thread', name= 'thread' ),
+    url( r'^forum/(?P<forumSlug>[\w-]+)/(?P<threadSlug>[\w-]+)$', 'forum.views.thread', name= 'thread' ),
+
+
+    url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html', 'redirect_field_name': '/' }, name= 'login' ),
+    url( r'^accounts/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/' }, name= 'logout' ),
+    url( r'^accounts/new$', 'forum.views.new_account', name= 'new_account' ),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

@@ -1,0 +1,13 @@
+table
+    {
+    border-spacing: 2px;
+    border-collapse: collapse;
+    }
+
+td
+    {
+    border-bottom: 2px solid #60c9ed;
+    padding: 5px;
+    min-width: 200px;
+    }
+

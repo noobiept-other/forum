@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Forum</title>
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block content %}
 {% if categories %}
 
     {% for category in categories %}
 
         <h2>{{ category.name }}</h2>
         {% if category.subforum_set.all %}
-            <ul>
+            <table>
             {% for subforum in category.subforum_set.all %}
-
-                <li><a href="{{ subforum.get_url }}">{{ subforum.name }}</a></li>
-
+                <tr>
+                    <td><a href="{{ subforum.get_url }}">{{ subforum.name }}</a></td>
+                    <td>threads: {{ subforum.thread_set.all|length }}</td>
+                    <td>latest post</td>
+                </tr>
             {% endfor %}
-            </ul>
+            </table>
         {% else %}
             <p>No sub-forums.</p>
         {% endif %}
@@ -29,6 +27,4 @@
     <p>No categories.</p>
 
 {% endif %}
-
-</body>
-</html>
+{% endblock %}

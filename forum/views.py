@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
-from forum.models import Category, SubForum, Thread
+from forum.models import Category, SubForum, Thread, Post
+from forum.forms import PostForm
 
 def index( request ):
 
@@ -37,8 +39,32 @@ def thread( request, forumSlug, threadSlug ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
+    if request.method == 'POST':
+        form = PostForm( request.POST )
+
+        if form.is_valid():
+            text = form.cleaned_data[ 'text' ]
+
+            newPost = Post( thread= theThread, user= request.user, text= text )
+            newPost.save()
+
+            return HttpResponseRedirect( reverse( 'thread', args=[ forumSlug, threadSlug ] ) )
+
+    else:
+        form = PostForm()
+
     context = {
-        'thread': theThread
+        'thread': theThread,
+        'forumSlug': forumSlug,
+        'threadSlug': threadSlug,
+        'form': form
     }
 
     return render( request, 'thread.html', context )
+
+
+
+
+def new_account( request ):
+
+    pass

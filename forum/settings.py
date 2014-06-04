@@ -120,6 +120,8 @@ TEMPLATE_DIRS = (
     os.path.join( BASE_DIR, 'templates' ),
 )
 
+LOGIN_REDIRECT_URL = '/'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

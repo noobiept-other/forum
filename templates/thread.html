@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thread</title>
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block content %}
 {% if thread %}
 
     <h1>
@@ -26,9 +22,26 @@
     {% else %}
         <p>No comments.</p>
     {% endif %}
+
+
+    {% if user.is_authenticated %}
+        {% if form.errors %}
+            <p>{{ form.errors }}</p>
+        {% endif %}
+        <form method="post" action="{% url 'thread' forumSlug threadSlug %}">
+            <span>{% csrf_token %}</span>
+
+            <div>
+                {{ form.text }}
+            </div>
+
+            <input type="submit" value="post" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    {% else %}
+        <p>Need to login to post.</p>
+    {% endif %}
 {% else %}
     <p>No thread.</p>
 {% endif %}
-
-</body>
-</html>
+{% endblock %}
