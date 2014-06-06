@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from forum.models import Category, SubForum, Thread, Post
+from forum.models import Category, SubForum, Thread, Post, Profile, PrivateMessage
 
 class CategoryAdmin( admin.ModelAdmin ):
 
@@ -31,3 +31,17 @@ class PostAdmin( admin.ModelAdmin ):
     list_display = ( 'thread', 'user', 'text', 'date_created' )
 
 admin.site.register( Post, PostAdmin )
+
+
+class ProfileAdmin( admin.ModelAdmin ):
+
+    list_display = ( 'user', 'email' )
+
+admin.site.register( Profile, ProfileAdmin )
+
+
+class PrivateMessageAdmin( admin.ModelAdmin ):
+
+    list_display = ( 'receiver', 'sender', 'title', 'content' )
+
+admin.site.register( PrivateMessage, PrivateMessageAdmin )

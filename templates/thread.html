@@ -14,7 +14,7 @@
         <ul>
             {% for post in thread.post_set.all %}
                 <li>
-                    By {{ post.user }} on {{ post.date_created }}<br />
+                    ( {{ forloop.counter }} ) By {{ post.user }} on {{ post.date_created }}<br />
                     {{ post.text }}
                 </li>
             {% endfor %}

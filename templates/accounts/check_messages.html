@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if messages %}
+
+    <table>
+        <tr>
+            <th>From</th>
+            <th>title</th>
+        </tr>
+        {% for message in messages %}
+            <tr>
+                <td><a href="{% url 'open_message' message.id %}">{{ message.sender }}</a></td>
+                <td>{{ message.title|truncatewords:20 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% else %}
+    <p>No messages.</p>
+{% endif %}
+
+{% endblock %}

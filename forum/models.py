@@ -72,3 +72,23 @@ class Post( models.Model ):
 
     def __unicode__(self):
         return self.text[:10]
+
+
+class Profile( models.Model ):
+
+    user = models.OneToOneField( User )
+    email = models.EmailField()
+
+    def __unicode__(self):
+        return self.user.username
+
+
+class PrivateMessage( models.Model ):
+
+    receiver = models.ForeignKey( User )
+    sender = models.ForeignKey( User, related_name= 'sender' )
+    title = models.TextField( max_length= 100 )
+    content = models.TextField( max_length= 500 )
+
+    def __unicode__(self):
+        return self.title
