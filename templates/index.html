@@ -6,13 +6,14 @@
     {% for category in categories %}
 
         <h2>{{ category.name }}</h2>
-        {% if category.subforum_set.all %}
+        {% if category.subforum %}
             <table>
-            {% for subforum in category.subforum_set.all %}
+            {% for subforum in category.subforum %}
                 <tr>
-                    <td><a href="{{ subforum.get_url }}">{{ subforum.name }}</a></td>
-                    <td>threads: {{ subforum.thread_set.all|length }}</td>
-                    <td>latest post: {{ subforum.get_last_post|truncatechars:10 }} by {{ subforum.get_last_post.user }}</td>
+                    <td><a href="{{ subforum.url }}">{{ subforum.name }}</a></td>
+                    <td>threads: {{ subforum.threads_count }}</td>
+                    <td>latest post: {{ subforum.last_post.text|truncatechars:10|default:"---" }} by {{ subforum.last_post.user|default:"---" }}
+                    </td>
                 </tr>
             {% endfor %}
             </table>

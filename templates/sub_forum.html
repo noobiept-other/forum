@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<p>
+    <a href="{% url 'new_thread' forumSlug %}">New Thread</a>
+</p>
+
 {% if threads %}
     <table>
     {% for thread in threads %}
@@ -12,7 +17,8 @@
         </tr>
         <tr>
             <td colspan="2">{{ thread.text|truncatechars:20 }}</td>
-            <td>Last comment: {{ thread.get_last_post.text|truncatechars:10 }}</td>
+            <td>Last comment:
+                {{ thread.get_last_post.text|truncatechars:10|default:"---" }} by {{ thread.get_last_post.user|default:"---" }}</td>
         </tr>
     {% endfor %}
     </table>

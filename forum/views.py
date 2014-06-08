@@ -3,15 +3,38 @@ from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.template.defaultfilters import slugify
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
-from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm
+from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm
 
 
 def index( request ):
 
+    categories = []
+
+    for category in Category.objects.all():
+
+        stuff = {
+            'name': category.name,
+            'subforum': []
+        }
+
+        for subForum in category.subforum_set.all():
+
+            lastPost = subForum.get_last_post()
+
+            stuff[ 'subforum' ].append({
+                'name': subForum.name,
+                'url': subForum.get_url(),
+                'threads_count': len( subForum.thread_set.all() ),
+                'last_post': lastPost
+            })
+
+        categories.append( stuff )
+
     context = {
-        'categories': Category.objects.all()
+        'categories': categories
     }
 
     return render( request, 'index.html', context )
@@ -39,13 +62,14 @@ def sub_forum( request, forumSlug ):
     ordered = sorted( threads, key= sortThreads, reverse= True )
 
     context = {
-        'threads': ordered
+        'threads': ordered,
+        'forumSlug': forumSlug
     }
 
     return render( request, 'sub_forum.html', context )
 
 
-def thread( request, forumSlug, threadSlug ):
+def thread( request, threadSlug ):
 
     try:
         theThread = Thread.objects.get( slug= threadSlug )
@@ -62,20 +86,56 @@ def thread( request, forumSlug, threadSlug ):
             newPost = Post( sub_forum= theThread.sub_forum, thread= theThread, user= request.user, text= text )
             newPost.save()
 
-            return HttpResponseRedirect( reverse( 'thread', args=[ forumSlug, threadSlug ] ) )
+            return HttpResponseRedirect( reverse( 'thread', args=[ threadSlug ] ) )
 
     else:
         form = PostForm()
 
     context = {
         'thread': theThread,
-        'forumSlug': forumSlug,
         'threadSlug': threadSlug,
         'form': form
     }
 
     return render( request, 'thread.html', context )
 
+
+@login_required( login_url= 'login' )
+def new_thread( request, forumSlug ):
+
+    try:
+        forum = SubForum.objects.get( slug= forumSlug )
+
+    except SubForum.DoesNotExist:
+        raise Http404( "Sub-forum doesn't exist." )
+
+
+    if request.method == 'POST':
+        form = NewThreadForm( request.POST )
+
+        if form.is_valid():
+
+            title = form.cleaned_data[ 'title' ]
+            content = form.cleaned_data[ 'content' ]
+
+            #HERE the slug has to be unique...
+            slug = slugify( title )
+
+            theThread = Thread( sub_forum= forum, user= request.user, title= title, slug= slug, text= content )
+            theThread.save()
+
+            return HttpResponseRedirect( reverse( 'thread', args= [ slug ] ) )
+
+    else:
+        form = NewThreadForm()
+
+
+    context = {
+        'forumSlug': forumSlug,
+        'form': form
+    }
+
+    return render( request, 'new_thread.html', context )
 
 
 def user_page( request, username ):

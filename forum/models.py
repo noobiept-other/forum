@@ -30,7 +30,11 @@ class SubForum( models.Model ):
             latest = self.post_set.latest( 'date_created' )
 
         except Post.DoesNotExist:
-            latest = self.thread_set.latest( 'date_created' )
+            try:
+                latest = self.thread_set.latest( 'date_created' )
+
+            except Thread.DoesNotExist:
+                return None
 
         return latest
 
@@ -49,7 +53,7 @@ class Thread( models.Model ):
         return self.title
 
     def get_url(self):
-        return reverse( 'thread', args= [ self.sub_forum.slug, self.slug ] )
+        return reverse( 'thread', args= [ self.slug ] )
 
     def get_last_post(self):
 
