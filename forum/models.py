@@ -77,6 +77,9 @@ class Post( models.Model ):
     def __unicode__(self):
         return self.text[:10]
 
+    def get_url(self):
+        return reverse( 'thread', args= [ self.thread.slug ] )
+
 
 class Profile( models.Model ):
 
@@ -85,6 +88,9 @@ class Profile( models.Model ):
 
     def __unicode__(self):
         return self.user.username
+
+    def get_url(self):
+        return reverse( 'user_page', args= [ self.user.username ] )
 
 
 class PrivateMessage( models.Model ):

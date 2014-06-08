@@ -5,7 +5,7 @@
 
     <h1>
         {{ thread.title }}<br />
-        Created by {{ thread.user }} in {{ thread.date_created }}
+        Created by <a href="{{ thread.get_url }}">{{ thread.user }}</a> in {{ thread.date_created }}
     </h1>
 
     <p>{{ thread.text }}</p>

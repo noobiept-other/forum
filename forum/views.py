@@ -63,7 +63,8 @@ def sub_forum( request, forumSlug ):
 
     context = {
         'threads': ordered,
-        'forumSlug': forumSlug
+        'forumSlug': forumSlug,
+        'paths': [ forum ]
     }
 
     return render( request, 'sub_forum.html', context )
@@ -94,7 +95,8 @@ def thread( request, threadSlug ):
     context = {
         'thread': theThread,
         'threadSlug': threadSlug,
-        'form': form
+        'form': form,
+        'paths': [ theThread.sub_forum, theThread ]
     }
 
     return render( request, 'thread.html', context )
@@ -153,7 +155,8 @@ def user_page( request, username ):
     context = {
         'username': username,
         'last_posts': last_posts,
-        'total_posts': total_posts
+        'total_posts': total_posts,
+        'total_threads': user.thread_set.all().count()
     }
 
     return render( request, 'accounts/user_page.html', context )

@@ -7,18 +7,20 @@
 </head>
 <body>
 
-<p id="Menu">
-<span>
-    <a href="{% url 'index' %}">home</a>
-</span>
-<span>
+<ul id="Menu">
+    <li><a href="{% url 'index' %}">home</a></li>
+    {% for path in paths %}
+        <li><a href="{{ path.get_url }}">{{ path|truncatechars:20 }}</a></li>
+    {% endfor %}
+
+    <li>
     {% if user.is_authenticated %}
         Welcome, <a href="{% url 'user_page' user.username %}">{{ user }}</a> ( <a href="{% url 'logout' %}">logout</a> )
     {% else %}
         <a href="{% url 'login' %}">Login</a>
     {% endif %}
-</span>
-</p>
+    </li>
+</ul>
 
 
 {% block content %}{% endblock %}

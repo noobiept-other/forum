@@ -16,3 +16,12 @@ th
     background-color: #e6edeb;
     }
 
+#Menu
+    {
+    list-style-type: none;
+    }
+
+#Menu > li
+    {
+    display: inline;
+    }
