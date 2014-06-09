@@ -1,13 +1,12 @@
 from django.shortcuts import render
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
-from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm
+from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm, CategoryForm
 
 
 def index( request ):
@@ -222,7 +221,6 @@ def send_private_message( request, username ):
 def check_message( request ):
 
     messages = request.user.privatemessage_set.all()
-    # messages = PrivateMessage.objects.filter( receiver= request.user )
 
     context = {
         'messages': messages
@@ -246,3 +244,33 @@ def open_message( request, messageId ):
     }
 
     return render( request, 'accounts/open_message.html', context )
+
+
+@login_required( login_url= 'login' )
+def new_category( request ):
+
+    user = request.user
+
+    if not user.is_moderator:
+        return HttpResponseForbidden( "Not a moderator." )
+
+
+    if request.method == 'POST':
+        form = CategoryForm( request.POST )
+
+        if form.is_valid():
+
+            categoryName = form.cleaned_data[ 'category' ]
+            category = Category( name= categoryName )
+            category.save()
+
+            return HttpResponseRedirect( reverse( 'index' ) )
+
+    else:
+        form = CategoryForm()
+
+    context = {
+        'form': form
+    }
+
+    return render( request, 'new_category.html', context )

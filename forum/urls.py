@@ -5,7 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
+
     url( r'^$', 'forum.views.index', name= 'index' ),
 
     url( r'^forum/(?P<forumSlug>[\w-]+)$', 'forum.views.sub_forum', name= 'subForum' ),
@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url( r'^thread/(?P<threadSlug>[\w-]+)$', 'forum.views.thread', name= 'thread' ),
 
     url( r'new_thread/(?P<forumSlug>[\w-]+)', 'forum.views.new_thread', name= 'new_thread' ),
+    url( r'new_category', 'forum.views.new_category', name= 'new_category' ),
+
 
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html', 'redirect_field_name': '/' }, name= 'login' ),

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
-from forum.models import Profile
+from forum.models import Profile, Category
 
 class PostForm( forms.Form ):
 
@@ -80,3 +80,18 @@ class MyUserCreationForm( FixUserCreationForm ):
         return user
 
 
+class CategoryForm( forms.Form ):
+
+    category = forms.CharField( max_length= 20 )
+
+    def clean_category(self):
+
+        categoryName = self.cleaned_data[ 'category' ]
+
+        try:
+            Category.objects.get( name= categoryName )
+
+        except Category.DoesNotExist:
+            return categoryName
+
+        raise forms.ValidationError( "Category already exists." )
