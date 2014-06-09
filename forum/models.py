@@ -1,6 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.utils import timezone
 
 import datetime
 
@@ -43,7 +45,7 @@ class SubForum( models.Model ):
 class Thread( models.Model ):
 
     sub_forum = models.ForeignKey( SubForum )
-    user = models.ForeignKey( User )
+    user = models.ForeignKey( settings.AUTH_USER_MODEL )
     title = models.CharField( max_length= 100 )
     slug = models.SlugField( max_length= 100, unique= True )    # for the url
     text = models.TextField( max_length= 1000 )
@@ -70,7 +72,7 @@ class Post( models.Model ):
 
     sub_forum = models.ForeignKey( SubForum )
     thread = models.ForeignKey( Thread )
-    user = models.ForeignKey( User )
+    user = models.ForeignKey( settings.AUTH_USER_MODEL )
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= datetime.datetime.now )
 
@@ -80,23 +82,15 @@ class Post( models.Model ):
     def get_url(self):
         return reverse( 'thread', args= [ self.thread.slug ] )
 
+class Profile( AbstractUser ):
 
-class Profile( models.Model ):
-
-    user = models.OneToOneField( User )
-    email = models.EmailField()
-
-    def __unicode__(self):
-        return self.user.username
-
-    def get_url(self):
-        return reverse( 'user_page', args= [ self.user.username ] )
+    is_moderator = models.BooleanField( default= False )
 
 
 class PrivateMessage( models.Model ):
 
-    receiver = models.ForeignKey( User )
-    sender = models.ForeignKey( User, related_name= 'sender' )
+    receiver = models.ForeignKey( settings.AUTH_USER_MODEL )
+    sender = models.ForeignKey( settings.AUTH_USER_MODEL, related_name= 'sender' )
     title = models.TextField( max_length= 100 )
     content = models.TextField( max_length= 500 )
 

@@ -3,6 +3,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
@@ -142,10 +143,12 @@ def new_thread( request, forumSlug ):
 
 def user_page( request, username ):
 
-    try:
-        user = User.objects.get( username= username )
+    userModel = get_user_model()
 
-    except User.DoesNotExist:
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
         raise Http404( "User doesn't exist." )
 
     posts = user.post_set.order_by( '-date_created' )
@@ -183,10 +186,12 @@ def new_account( request ):
 @login_required( login_url= 'login' )
 def send_private_message( request, username ):
 
-    try:
-        user = User.objects.get( username= username )
+    userModel = get_user_model()
 
-    except User.DoesNotExist:
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
         raise Http404( 'Invalid username.' )
 
 

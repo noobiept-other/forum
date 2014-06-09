@@ -122,6 +122,8 @@ TEMPLATE_DIRS = (
 
 LOGIN_REDIRECT_URL = '/'
 
+AUTH_USER_MODEL = 'forum.Profile'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

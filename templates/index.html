@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% if user.is_moderator %}
+    <ul>
+        <li>New category.</li>
+    </ul>
+{% endif %}
+
 {% if categories %}
 
     {% for category in categories %}

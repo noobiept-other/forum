@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 
 from forum.models import Category, SubForum, Thread, Post, Profile, PrivateMessage
 
@@ -40,3 +39,9 @@ class PrivateMessageAdmin( admin.ModelAdmin ):
 
 admin.site.register( PrivateMessage, PrivateMessageAdmin )
 
+
+class ProfileAdmin( admin.ModelAdmin ):
+
+    list_display = ( 'username', 'email', 'is_moderator', 'is_staff', 'date_joined' )
+
+admin.site.register( Profile, ProfileAdmin )
