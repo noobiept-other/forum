@@ -5,6 +5,7 @@ from forum.models import Category, SubForum, Thread, Post, Profile, PrivateMessa
 class CategoryAdmin( admin.ModelAdmin ):
 
     list_display = ( 'name', )
+    prepopulated_fields = { 'slug': ( 'name', ) }
 
 admin.site.register( Category, CategoryAdmin )
 

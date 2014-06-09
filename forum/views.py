@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
-from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm, CategoryForm
+from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm, CategoryForm, NewSubForumForm
 
 
 def index( request ):
@@ -17,6 +17,7 @@ def index( request ):
 
         stuff = {
             'name': category.name,
+            'slug': category.slug,
             'subforum': []
         }
 
@@ -249,9 +250,7 @@ def open_message( request, messageId ):
 @login_required( login_url= 'login' )
 def new_category( request ):
 
-    user = request.user
-
-    if not user.is_moderator:
+    if not request.user.is_moderator:
         return HttpResponseForbidden( "Not a moderator." )
 
 
@@ -261,7 +260,8 @@ def new_category( request ):
         if form.is_valid():
 
             categoryName = form.cleaned_data[ 'category' ]
-            category = Category( name= categoryName )
+            categorySlug = slugify( categoryName )
+            category = Category( name= categoryName, slug= categorySlug )
             category.save()
 
             return HttpResponseRedirect( reverse( 'index' ) )
@@ -274,3 +274,41 @@ def new_category( request ):
     }
 
     return render( request, 'new_category.html', context )
+
+
+@login_required( login_url= 'login' )
+def new_sub_forum( request, categorySlug ):
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( "Not a moderator." )
+
+    try:
+        category = Category.objects.get( slug= categorySlug )
+
+    except Category.DoesNotExist:
+        raise Http404( "Wrong category." )
+
+
+    if request.method == 'POST':
+
+        form = NewSubForumForm( request.POST )
+
+        if form.is_valid():
+
+            forumName = form.cleaned_data[ 'forumName' ]
+            forumSlug = slugify( forumName )
+
+            forum = SubForum( name= forumName, slug= forumSlug, category= category )
+            forum.save()
+
+            return HttpResponseRedirect( reverse( 'index' ) )
+
+    else:
+        form = NewSubForumForm()
+
+    context = {
+        'categorySlug': categorySlug,
+        'form': form
+    }
+
+    return render( request, 'new_sub_forum.html', context )

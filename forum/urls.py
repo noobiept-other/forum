@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 
     url( r'new_thread/(?P<forumSlug>[\w-]+)', 'forum.views.new_thread', name= 'new_thread' ),
     url( r'new_category', 'forum.views.new_category', name= 'new_category' ),
-
+    url( r'new_sub_forum/(?P<categorySlug>[\w-]+)', 'forum.views.new_sub_forum', name= 'new_sub_forum' ),
 
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html', 'redirect_field_name': '/' }, name= 'login' ),

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>New sub-forum</p>
+
+{% if form.errors %}
+    <p>{{ form.errors }}</p>
+{% endif %}
+
+<form method="post" action="{% url 'new_sub_forum' categorySlug %}">
+    <span>{% csrf_token %}</span>
+
+    <table>
+        <tr>
+            <td>{{ form.forumName.label_tag }}</td>
+            <td>{{ form.forumName }}</td>
+        </tr>
+    </table>
+
+    <input type="submit" value="new sub-forum" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

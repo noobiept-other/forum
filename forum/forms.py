@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
-from forum.models import Profile, Category
+from forum.models import Profile, Category, SubForum
 
 class PostForm( forms.Form ):
 
@@ -95,3 +95,20 @@ class CategoryForm( forms.Form ):
             return categoryName
 
         raise forms.ValidationError( "Category already exists." )
+
+
+class NewSubForumForm( forms.Form ):
+
+    forumName = forms.CharField( max_length= 100 )
+
+    def clean_forumname(self):
+
+        name = self.cleaned_data[ 'forumName' ]
+
+        try:
+            SubForum.objects.get( name= name )
+
+        except SubForum.DoesNotExist:
+            return name
+
+        raise forms.ValidationError( "A sub-forum with that name already exists." )

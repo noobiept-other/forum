@@ -13,6 +13,10 @@
     {% for category in categories %}
 
         <h2>{{ category.name }}</h2>
+        {% if user.is_moderator %}
+            <p><a href="{% url 'new_sub_forum' category.slug %}">New sub-forum</a></p>
+        {% endif %}
+
         {% if category.subforum %}
             <table>
             {% for subforum in category.subforum %}
