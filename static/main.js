@@ -6,7 +6,7 @@ for (var a = 0 ; a < rows.length ; a++)
     {
     rows[ a ].onclick = function()
         {
-        window.location = this.getAttribute( 'href' );
+        window.location = this.getAttribute( 'data-url' );
         };
     }
 };

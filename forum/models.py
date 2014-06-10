@@ -81,7 +81,17 @@ class Post( models.Model ):
         return self.text[:10]
 
     def get_url(self):
-        return reverse( 'thread', args= [ self.thread.slug ] )
+        position = 0
+
+        for index, post in enumerate( self.thread.post_set.all() ):
+            if post == self:
+                position = index
+
+        url = reverse( 'thread', args= [ self.thread.slug ] )
+
+        url += '#post_' + str( position + 1 )
+
+        return url
 
 class Profile( AbstractUser ):
 

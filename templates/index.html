@@ -20,7 +20,7 @@
         {% if category.subforum %}
             <table id="CategoryTable">
             {% for subforum in category.subforum %}
-                <tr class="clickableRow" href="{{ subforum.url }}">
+                <tr class="clickableRow" data-url="{{ subforum.url }}">
                     <td><a href="{{ subforum.url }}">{{ subforum.name }}</a></td>
                     <td>threads: {{ subforum.threads_count }}</td>
                     <td>latest post:
