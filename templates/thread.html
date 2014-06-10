@@ -13,7 +13,15 @@
                 moderator
             {% endif %}
         </td>
-        <td class="ThreadRight">{{ thread.text }}</td>
+        <td class="ThreadRight">
+            {{ thread.text }}
+
+        {% if user == thread.user %}
+            <ul class="postMenu">
+                <li><a>edit</a></li>
+            </ul>
+        {% endif %}
+        </td>
     </tr>
 
 
@@ -27,7 +35,15 @@
                 moderator
             {% endif %}
         </td>
-        <td class="ThreadRight">{{ post.text }}</td>
+        <td class="ThreadRight">
+            {{ post.text }}
+
+        {% if user == post.user %}
+            <ul class="postMenu">
+                <li><a href="{% url 'edit_post' post.id %}">edit</a></li>
+            </ul>
+        {% endif %}
+        </td>
     </tr>
     {% endfor %}
 {% endif %}

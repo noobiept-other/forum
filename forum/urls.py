@@ -7,15 +7,14 @@ admin.autodiscover()
 urlpatterns = patterns('',
 
     url( r'^$', 'forum.views.index', name= 'index' ),
-
     url( r'^forum/(?P<forumSlug>[\w-]+)$', 'forum.views.sub_forum', name= 'subForum' ),
-
     url( r'^thread/(?P<threadSlug>[\w-]+)$', 'forum.views.thread', name= 'thread' ),
 
     url( r'new_thread/(?P<forumSlug>[\w-]+)', 'forum.views.new_thread', name= 'new_thread' ),
     url( r'new_category', 'forum.views.new_category', name= 'new_category' ),
     url( r'new_sub_forum/(?P<categorySlug>[\w-]+)', 'forum.views.new_sub_forum', name= 'new_sub_forum' ),
 
+    url( r'edit_post/(?P<postId>\w+)', 'forum.views.edit_post', name= 'edit_post' ),
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
     url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),

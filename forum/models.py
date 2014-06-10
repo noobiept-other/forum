@@ -66,6 +66,9 @@ class Thread( models.Model ):
 
         return latest
 
+    def get_post_count(self):
+        return self.post_set.all().count()
+
 
 class Post( models.Model ):
 

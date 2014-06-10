@@ -317,3 +317,39 @@ def new_sub_forum( request, categorySlug ):
     }
 
     return render( request, 'new_sub_forum.html', context )
+
+
+@login_required( login_url= 'login' )
+def edit_post( request, postId ):
+
+    try:
+        post = Post.objects.get( id= postId )
+
+    except Post.DoesNotExist:
+        raise Http404( "Post doesn't exist." )
+
+    if request.user != post.user:
+        return HttpResponseForbidden( "Not your post." )
+
+
+    if request.method == 'POST':
+
+        form = PostForm( request.POST )
+
+        if form.is_valid():
+            text = form.cleaned_data[ 'text' ]
+
+            post.text = text
+            post.save()
+
+            return HttpResponseRedirect( post.get_url() )
+
+    else:
+        form = PostForm( initial= { 'text': post.text } )
+
+    context = {
+        'form': form,
+        'post': post
+    }
+
+    return render( request, 'edit_post.html', context )

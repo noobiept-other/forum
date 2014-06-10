@@ -7,6 +7,7 @@ td
     {
     padding: 5px;
     min-width: 200px;
+    position: relative;
     }
 
 .tooltip
@@ -19,12 +20,24 @@ td
     padding: 5px;
     }
 
-    /* menu */
+.postMenu
+    {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    }
 
-#Menu ul
+.postMenu li
+    {
+    display: inline;
+    }
+
+ul
     {
     list-style-type: none;
     }
+
+    /* menu */
 
 #Menu li
     {

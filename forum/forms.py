@@ -7,7 +7,7 @@ from forum.models import Profile, Category, SubForum
 
 class PostForm( forms.Form ):
 
-    text = forms.CharField( widget= forms.Textarea )
+    text = forms.CharField( max_length= 500, widget= forms.Textarea )
 
 
 class PrivateMessageForm( forms.Form ):
@@ -112,3 +112,4 @@ class NewSubForumForm( forms.Form ):
             return name
 
         raise forms.ValidationError( "A sub-forum with that name already exists." )
+
