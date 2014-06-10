@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
@@ -25,7 +26,7 @@
                     <td>threads: {{ subforum.threads_count }}</td>
                     <td>latest post:
                         {% if subforum.last_post %}
-                            <a href="{{ subforum.last_post.get_url }}">{{ subforum.last_post.text|truncatechars:10 }}</a> by <a href="{{ subforum.last_post.user.get_url }}">{{ subforum.last_post.user }}</a>
+                            <a href="{{ subforum.last_post.get_url }}">{{ subforum.last_post.text|truncatechars:10 }}</a> by <a href="{{ subforum.last_post.user.get_url }}">{{ subforum.last_post.user }}</a> {{ subforum.last_post.date_created|naturaltime }}
                         {% else %}
                             ---
                         {% endif %}

@@ -88,7 +88,7 @@ def thread( request, threadSlug ):
             newPost = Post( sub_forum= theThread.sub_forum, thread= theThread, user= request.user, text= text )
             newPost.save()
 
-            return HttpResponseRedirect( reverse( 'thread', args=[ threadSlug ] ) )
+            return HttpResponseRedirect( newPost.get_url() )
 
     else:
         form = PostForm()

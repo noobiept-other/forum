@@ -4,8 +4,6 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
 
-import datetime
-
 class Category( models.Model ):
 
     name = models.CharField( max_length= 100, unique= True )
@@ -50,7 +48,7 @@ class Thread( models.Model ):
     title = models.CharField( max_length= 100 )
     slug = models.SlugField( max_length= 100, unique= True )    # for the url
     text = models.TextField( max_length= 1000 )
-    date_created = models.DateTimeField( help_text= 'Date Created', default= datetime.datetime.now )
+    date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
 
     def __unicode__(self):
         return self.title
@@ -75,7 +73,7 @@ class Post( models.Model ):
     thread = models.ForeignKey( Thread )
     user = models.ForeignKey( settings.AUTH_USER_MODEL )
     text = models.TextField( max_length= 1000 )
-    date_created = models.DateTimeField( help_text= 'Date Created', default= datetime.datetime.now )
+    date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
 
     def __unicode__(self):
         return self.text[:10]

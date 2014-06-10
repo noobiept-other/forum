@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 {% if thread %}
 
 <table id="ThreadTable">
     <tr id="post_0">
-        <td class="ThreadLeft"><a href="{{ thread.user.get_url }}">{{ thread.user }}</a> in {{ thread.date_created }}</td>
+        <td class="ThreadLeft"><a href="{{ thread.user.get_url }}">{{ thread.user }}</a> in {{ thread.date_created|naturaltime }}</td>
         <td class="ThreadRight">{{ thread.text }}</td>
     </tr>
 
@@ -13,7 +14,7 @@
 {% if thread.post_set.all %}
     {% for post in thread.post_set.all %}
     <tr id="post_{{ forloop.counter }}">
-        <td class="ThreadLeft"><a href="{{ post.user.get_url }}">{{ post.user }}</a> in {{ post.date_created }}</td>
+        <td class="ThreadLeft"><a href="{{ post.user.get_url }}">{{ post.user }}</a> {{ post.date_created|naturaltime }}</td>
         <td class="ThreadRight">{{ post.text }}</td>
     </tr>
     {% endfor %}
