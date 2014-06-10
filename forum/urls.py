@@ -17,8 +17,8 @@ urlpatterns = patterns('',
     url( r'new_sub_forum/(?P<categorySlug>[\w-]+)', 'forum.views.new_sub_forum', name= 'new_sub_forum' ),
 
 
-    url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html', 'redirect_field_name': '/' }, name= 'login' ),
-    url( r'^accounts/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/' }, name= 'logout' ),
+    url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
+    url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),
     url( r'^accounts/new$', 'forum.views.new_account', name= 'new_account' ),
 
     url( r'^accounts/user/(?P<username>\w+)$', 'forum.views.user_page', name= 'user_page' ),

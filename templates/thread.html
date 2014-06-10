@@ -6,7 +6,7 @@
 
 <table id="ThreadTable">
     <tr id="post_0">
-        <td class="ThreadLeft"><a href="{{ thread.user.get_url }}">{{ thread.user }}</a> in {{ thread.date_created|naturaltime }}</td>
+        <td class="ThreadLeft"><a href="{{ thread.user.get_url }}">{{ thread.user }}</a> {{ thread.date_created|naturaltime }}</td>
         <td class="ThreadRight">{{ thread.text }}</td>
     </tr>
 

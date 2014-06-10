@@ -12,9 +12,9 @@
     <ul>
         <li>
         {% if user.is_authenticated %}
-            Welcome, <a href="{% url 'user_page' user.username %}">{{ user }}</a> ( <a href="{% url 'logout' %}">logout</a> )
+            Welcome, <a href="{% url 'user_page' user.username %}">{{ user }}</a> ( <a href="{% url 'logout' %}?next={{ request.get_full_path|urlencode }}">logout</a> )
         {% else %}
-            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
         {% endif %}
         </li>
     </ul>
