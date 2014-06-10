@@ -99,6 +99,9 @@ class Profile( AbstractUser ):
 
         return reverse( 'user_page', args= [ self.username ] )
 
+    def get_post_count(self):
+        return self.post_set.all().count()
+
 
 class PrivateMessage( models.Model ):
 

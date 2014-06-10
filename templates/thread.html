@@ -6,7 +6,13 @@
 
 <table id="ThreadTable">
     <tr id="post_0">
-        <td class="ThreadLeft"><a href="{{ thread.user.get_url }}">{{ thread.user }}</a> {{ thread.date_created|naturaltime }}</td>
+        <td class="ThreadLeft">
+            <a href="{{ thread.user.get_url }}">{{ thread.user }}</a> {{ thread.date_created|naturaltime }}<br />
+            {{ thread.user.get_post_count }} posts<br />
+            {% if thread.user.is_moderator %}
+                moderator
+            {% endif %}
+        </td>
         <td class="ThreadRight">{{ thread.text }}</td>
     </tr>
 
@@ -14,7 +20,13 @@
 {% if thread.post_set.all %}
     {% for post in thread.post_set.all %}
     <tr id="post_{{ forloop.counter }}">
-        <td class="ThreadLeft"><a href="{{ post.user.get_url }}">{{ post.user }}</a> {{ post.date_created|naturaltime }}</td>
+        <td class="ThreadLeft">
+            <a href="{{ post.user.get_url }}">{{ post.user }}</a> {{ post.date_created|naturaltime }}<br />
+            {{ post.user.get_post_count }} posts<br />
+            {% if post.user.is_moderator %}
+                moderator
+            {% endif %}
+        </td>
         <td class="ThreadRight">{{ post.text }}</td>
     </tr>
     {% endfor %}
