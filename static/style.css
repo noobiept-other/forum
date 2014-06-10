@@ -9,6 +9,16 @@ td
     min-width: 200px;
     }
 
+.tooltip
+    {
+    position: absolute;
+    min-width: 100px;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 0 10px 0;
+    padding: 5px;
+    }
+
     /* menu */
 
 #Menu ul

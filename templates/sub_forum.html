@@ -10,8 +10,8 @@
 {% if threads %}
     <table id="SubForumTable">
     {% for thread in threads %}
-        <tr class="clickableRow" data-url="{{ thread.get_url }}">
-            <td><a href="{{ thread.get_url }}">{{ thread.title }}</a></td>
+        <tr class="clickableRow contentPreview" data-url="{{ thread.get_url }}" data-content="{{ thread.text|truncatechars:20 }}">
+            <td><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:20 }}</a></td>
             <td>by <a href="{% url 'user_page' thread.user.username %}">{{ thread.user }}</a></td>
             <td>lastest post:
                 {% if thread.get_last_post %}
