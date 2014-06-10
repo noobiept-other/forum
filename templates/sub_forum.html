@@ -7,16 +7,11 @@
 </p>
 
 {% if threads %}
-    <table>
+    <table id="SubForumTable">
     {% for thread in threads %}
-        <tr>
-            <th><a href="{{ thread.get_url }}">{{ thread.title }}</a></th>
-            <th>by <a href="{% url 'user_page' thread.user.username %}">{{ thread.user }}</a></th>
-            <th>Created in {{ thread.date_created }}</th>
-
-        </tr>
-        <tr>
-            <td colspan="2">{{ thread.text|truncatechars:20 }}</td>
+        <tr class="clickableRow" href="{{ thread.get_url }}">
+            <td><a href="{{ thread.get_url }}">{{ thread.title }}</a></td>
+            <td>by <a href="{% url 'user_page' thread.user.username %}">{{ thread.user }}</a></td>
             <td>lastest post:
                 {% if thread.get_last_post %}
                     <a href="{% url 'thread' thread.get_last_post.thread.slug %}">{{ thread.get_last_post.text|truncatechars:10 }}</a> by <a href="{% url 'user_page' thread.get_last_post.user.username %}">{{ thread.get_last_post.user }}</a>

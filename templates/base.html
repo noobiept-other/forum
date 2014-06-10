@@ -3,24 +3,29 @@
 <head>
     <title>Forum</title>
 
+    <script type="text/javascript" src="{{ STATIC_URL }}main.js"></script>
     <link rel="stylesheet" href="{{ STATIC_URL }}style.css" />
 </head>
 <body>
 
-<ul id="Menu">
-    <li><a href="{% url 'index' %}">home</a></li>
-    {% for path in paths %}
-        <li><a href="{{ path.get_url }}">{{ path|truncatechars:20 }}</a></li>
-    {% endfor %}
+<div id="Menu">
+    <ul>
+        <li>
+        {% if user.is_authenticated %}
+            Welcome, <a href="{% url 'user_page' user.username %}">{{ user }}</a> ( <a href="{% url 'logout' %}">logout</a> )
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+        </li>
+    </ul>
 
-    <li>
-    {% if user.is_authenticated %}
-        Welcome, <a href="{% url 'user_page' user.username %}">{{ user }}</a> ( <a href="{% url 'logout' %}">logout</a> )
-    {% else %}
-        <a href="{% url 'login' %}">Login</a>
-    {% endif %}
-    </li>
-</ul>
+    <ul>
+        <li><a href="{% url 'index' %}">home</a></li>
+        {% for path in paths %}
+            <li><a href="{{ path.get_url }}">{{ path|truncatechars:20 }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
 
 
 {% block content %}{% endblock %}

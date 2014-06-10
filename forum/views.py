@@ -155,11 +155,16 @@ def user_page( request, username ):
     last_posts = posts[ :5 ]
     total_posts = posts.count()
 
+    threads = user.thread_set.order_by( '-date_created' )
+    last_threads = threads[ :5 ]
+    total_threads = threads.count()
+
     context = {
         'username': username,
         'last_posts': last_posts,
         'total_posts': total_posts,
-        'total_threads': user.thread_set.all().count()
+        'last_threads': last_threads,
+        'total_threads': total_threads
     }
 
     return render( request, 'accounts/user_page.html', context )

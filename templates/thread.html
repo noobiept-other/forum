@@ -3,37 +3,31 @@
 {% block content %}
 {% if thread %}
 
-    <h1>
-        {{ thread.title }}<br />
-        Created by <a href="{{ thread.get_url }}">{{ thread.user }}</a> in {{ thread.date_created }}
-    </h1>
+<table id="ThreadTable">
+    <tr id="post_0">
+        <td class="ThreadLeft"><a href="{{ thread.user.get_url }}">{{ thread.user }}</a> in {{ thread.date_created }}</td>
+        <td class="ThreadRight">{{ thread.text }}</td>
+    </tr>
 
-    <p>{{ thread.text }}</p>
 
-    {% if thread.post_set.all %}
-        <ul>
-            {% for post in thread.post_set.all %}
-                <li>
-                    ( {{ forloop.counter }} ) By {{ post.user }} on {{ post.date_created }}<br />
-                    {{ post.text }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No comments.</p>
-    {% endif %}
-
+{% if thread.post_set.all %}
+    {% for post in thread.post_set.all %}
+    <tr id="post_{{ forloop.counter }}">
+        <td class="ThreadLeft"><a href="{{ post.user.get_url }}">{{ post.user }}</a> in {{ post.date_created }}</td>
+        <td class="ThreadRight">{{ post.text }}</td>
+    </tr>
+    {% endfor %}
+{% endif %}
+</table>
 
     {% if user.is_authenticated %}
         {% if form.errors %}
             <p>{{ form.errors }}</p>
         {% endif %}
-        <form method="post" action="{% url 'thread' threadSlug %}">
-            <span>{% csrf_token %}</span>
+        <form id="ThreadPostForm" method="post" action="{% url 'thread' threadSlug %}">
+            {% csrf_token %}
 
-            <div>
-                {{ form.text }}
-            </div>
+            {{ form.text }}
 
             <input type="submit" value="post" />
             <input type="hidden" name="next" value="{{ next }}" />

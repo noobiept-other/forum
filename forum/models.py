@@ -87,6 +87,10 @@ class Profile( AbstractUser ):
 
     is_moderator = models.BooleanField( default= False )
 
+    def get_url(self):
+
+        return reverse( 'user_page', args= [ self.username ] )
+
 
 class PrivateMessage( models.Model ):
 

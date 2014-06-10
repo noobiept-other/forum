@@ -26,11 +26,24 @@
 {% if last_posts %}
     <ul>
         {% for post in last_posts %}
-            <li>{{ post.text|truncatechars:10 }}</li>
+            <li><a href="{{ post.get_url }}">{{ post.text|truncatechars:20 }}</a></li>
         {% endfor %}
     </ul>
 {% else %}
     <p>No posts.</p>
 {% endif %}
+
+<h2>Last threads</h2>
+
+{% if last_threads %}
+    <ul>
+        {% for thread in last_threads %}
+            <li><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:20 }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No threads.</p>
+{% endif %}
+
 
 {% endblock %}

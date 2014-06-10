@@ -12,20 +12,20 @@
 
     {% for category in categories %}
 
-        <h2>{{ category.name }}</h2>
+        <h2 class="CategoryName">{{ category.name }}</h2>
         {% if user.is_moderator %}
             <p><a href="{% url 'new_sub_forum' category.slug %}">New sub-forum</a></p>
         {% endif %}
 
         {% if category.subforum %}
-            <table>
+            <table id="CategoryTable">
             {% for subforum in category.subforum %}
-                <tr>
+                <tr class="clickableRow" href="{{ subforum.url }}">
                     <td><a href="{{ subforum.url }}">{{ subforum.name }}</a></td>
                     <td>threads: {{ subforum.threads_count }}</td>
                     <td>latest post:
                         {% if subforum.last_post %}
-                            <a href="{{ subforum.last_post.get_url }}">{{ subforum.last_post.text|truncatechars:10 }}</a> by <a href="{{ subforum.last_post.user.profile.get_url }}">{{ subforum.last_post.user }}</a>
+                            <a href="{{ subforum.last_post.get_url }}">{{ subforum.last_post.text|truncatechars:10 }}</a> by <a href="{{ subforum.last_post.user.get_url }}">{{ subforum.last_post.user }}</a>
                         {% else %}
                             ---
                         {% endif %}
