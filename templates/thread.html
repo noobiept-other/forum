@@ -16,18 +16,16 @@
         <td class="ThreadRight">
             {{ thread.text|linebreaksbr }}
 
-        {% if user == thread.user %}
             <ul class="postMenu">
                 {% if thread.was_edited %}
-                    <li>edited: {{ thread.date_edited|naturaltime }}</li>
+                    <li>edited by <a href="{{ thread.edited_by.get_url }}">{{ thread.edited_by }}</a>: {{ thread.date_edited|naturaltime }}</li>
                 {% endif %}
 
-                {% if user == thread.user %}
+                {% if user == thread.user or user.is_moderator %}
                     <li><a href="{% url 'edit_thread' thread.slug %}">edit</a></li>
                 {% endif %}
             </ul>
-        {% endif %}
-        </td>
+         </td>
     </tr>
 
 
@@ -46,10 +44,10 @@
 
             <ul class="postMenu">
                 {% if post.was_edited %}
-                    <li>edited: {{ post.date_edited|naturaltime }}</li>
+                    <li>edited by <a href="{{ post.edited_by.get_url }}">{{ post.edited_by }}</a>: {{ post.date_edited|naturaltime }}</li>
                 {% endif %}
 
-                {% if user == post.user %}
+                {% if user == post.user or user.is_moderator %}
                     <li><a href="{% url 'edit_post' post.id %}">edit</a></li>
                 {% endif %}
             </ul>

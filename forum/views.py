@@ -326,8 +326,8 @@ def edit_post( request, postId ):
     except Post.DoesNotExist:
         raise Http404( "Post doesn't exist." )
 
-    if request.user != post.user:
-        return HttpResponseForbidden( "Not your post." )
+    if request.user != post.user and not request.user.is_moderator:
+        return HttpResponseForbidden( "Not your post (and not a moderator)." )
 
 
     if request.method == 'POST':
@@ -339,6 +339,7 @@ def edit_post( request, postId ):
 
             post.text = text
             post.date_edited = timezone.localtime( timezone.now() )
+            post.edited_by = request.user
             post.save()
 
             return HttpResponseRedirect( post.get_url() )
@@ -363,7 +364,7 @@ def edit_thread( request, threadSlug ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
-    if request.user != theThread.user:
+    if request.user != theThread.user and not request.user.is_moderator:
         return HttpResponseForbidden( "Not your thread." )
 
 
@@ -377,6 +378,7 @@ def edit_thread( request, threadSlug ):
             theThread.title = title
             theThread.text = content
             theThread.date_edited = timezone.localtime( timezone.now() )
+            theThread.edited_by = request.user
             utilities.unique_slugify( theThread, title )
             theThread.save()
 

@@ -50,6 +50,7 @@ class Thread( models.Model ):
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
     date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
+    edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the thread.', blank= True, null= True, related_name= 'thread_edited_by' )
 
     def __unicode__(self):
         return self.title
@@ -85,6 +86,7 @@ class Post( models.Model ):
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
     date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
+    edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the post.', blank= True, null= True, related_name= 'post_edited_by' )
 
     def __unicode__(self):
         return self.text[:10]
