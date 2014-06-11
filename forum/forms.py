@@ -98,7 +98,7 @@ class CategoryForm( forms.Form ):
         raise forms.ValidationError( "Category already exists." )
 
 
-class NewSubForumForm( forms.Form ):
+class SubForumForm( forms.Form ):
 
     forumName = forms.CharField( max_length= 100 )
 
@@ -112,7 +112,6 @@ class NewSubForumForm( forms.Form ):
         except SubForum.DoesNotExist:
 
             return name
-
 
         raise forms.ValidationError( "A sub-forum with that name already exists." )
 

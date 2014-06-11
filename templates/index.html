@@ -5,7 +5,7 @@
 
 {% if user.is_moderator %}
     <ul>
-        <li><a href="{% url 'new_category' %}">New category.</a></li>
+        <li><a href="{% url 'new_category' %}">New category</a></li>
     </ul>
 {% endif %}
 
@@ -15,7 +15,10 @@
 
         <h2 class="CategoryName">{{ category.name }}</h2>
         {% if user.is_moderator %}
-            <p><a href="{% url 'new_sub_forum' category.slug %}">New sub-forum</a></p>
+            <p>
+                <a href="{% url 'new_sub_forum' category.slug %}">New sub-forum</a>
+                <a href="{% url 'edit_category' category.slug %}">edit</a>
+            </p>
         {% endif %}
 
         {% if category.subforum %}

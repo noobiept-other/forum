@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
-from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, NewSubForumForm
+from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, SubForumForm
 import forum.utilities as utilities
 
 def index( request ):
@@ -136,7 +136,7 @@ def new_thread( request, forumSlug ):
         'form': form
     }
 
-    return render( request, 'new_thread.html', context )
+    return render( request, 'new/new_thread.html', context )
 
 
 def user_page( request, username ):
@@ -276,7 +276,7 @@ def new_category( request ):
         'form': form
     }
 
-    return render( request, 'new_category.html', context )
+    return render( request, 'new/new_category.html', context )
 
 
 @login_required( login_url= 'login' )
@@ -294,7 +294,7 @@ def new_sub_forum( request, categorySlug ):
 
     if request.method == 'POST':
 
-        form = NewSubForumForm( request.POST )
+        form = SubForumForm( request.POST )
 
         if form.is_valid():
 
@@ -307,14 +307,14 @@ def new_sub_forum( request, categorySlug ):
             return HttpResponseRedirect( reverse( 'index' ) )
 
     else:
-        form = NewSubForumForm()
+        form = SubForumForm()
 
     context = {
         'categorySlug': categorySlug,
         'form': form
     }
 
-    return render( request, 'new_sub_forum.html', context )
+    return render( request, 'new/new_sub_forum.html', context )
 
 
 @login_required( login_url= 'login' )
@@ -352,7 +352,7 @@ def edit_post( request, postId ):
         'post': post
     }
 
-    return render( request, 'edit_post.html', context )
+    return render( request, 'edit/edit_post.html', context )
 
 
 @login_required( login_url= 'login' )
@@ -365,7 +365,7 @@ def edit_thread( request, threadSlug ):
         raise Http404( "Thread doesn't exist." )
 
     if request.user != theThread.user and not request.user.is_moderator:
-        return HttpResponseForbidden( "Not your thread." )
+        return HttpResponseForbidden( "Not your thread (and not a moderator)." )
 
 
     if request.method == 'POST':
@@ -392,4 +392,74 @@ def edit_thread( request, threadSlug ):
         'thread': theThread
     }
 
-    return render( request, 'edit_thread.html', context )
+    return render( request, 'edit/edit_thread.html', context )
+
+
+@login_required( login_url= 'login' )
+def edit_category( request, categorySlug ):
+
+    try:
+        category = Category.objects.get( slug= categorySlug )
+
+    except Category.DoesNotExist:
+        raise Http404( "Category doesn't exist." )
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( "Not a moderator." )
+
+    if request.method == 'POST':
+        form = CategoryForm( request.POST )
+
+        if form.is_valid():
+            categoryName = form.cleaned_data[ 'category' ]
+
+            category.name = categoryName
+            utilities.unique_slugify( category, categoryName )
+            category.save()
+
+            return HttpResponseRedirect( reverse( 'index' ) )
+
+    else:
+        form = CategoryForm( initial= { 'category': category.name } )
+
+    context = {
+        'form': form,
+        'category': category
+    }
+
+    return render( request, 'edit/edit_category.html', context )
+
+
+@login_required( login_url= 'login' )
+def edit_sub_forum( request, forumSlug ):
+
+    try:
+        forum = SubForum.objects.get( slug= forumSlug )
+
+    except SubForum.DoesNotExist:
+        raise Http404( "Sub-forum doesn't exist." )
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( "Not a moderator." )
+
+    if request.method == 'POST':
+        form = SubForumForm( request.POST )
+
+        if form.is_valid():
+            forumName = form.cleaned_data[ 'forumName' ]
+
+            forum.name = forumName
+            utilities.unique_slugify( forum, forumName )
+            forum.save()
+
+            return HttpResponseRedirect( forum.get_url() )
+
+    else:
+        form = SubForumForm( initial= { 'forumName': forum.name } )
+
+    context = {
+        'form': form,
+        'sub_forum': forum
+    }
+
+    return render( request, 'edit/edit_sub_forum.html', context )
