@@ -8,7 +8,7 @@ urlpatterns = patterns('',
 
     url( r'^$', 'forum.views.index', name= 'index' ),
     url( r'^forum/(?P<forumSlug>[\w-]+)$', 'forum.views.sub_forum', name= 'subForum' ),
-    url( r'^thread/(?P<threadSlug>[\w-]+)$', 'forum.views.thread', name= 'thread' ),
+    url( r'^thread/(?P<threadSlug>[\w-]+)$', 'forum.views.open_thread', name= 'thread' ),
 
     url( r'^new_thread/(?P<forumSlug>[\w-]+)$', 'forum.views.new_thread', name= 'new_thread' ),
     url( r'^new_category$', 'forum.views.new_category', name= 'new_category' ),
@@ -18,6 +18,12 @@ urlpatterns = patterns('',
     url( r'^edit_thread/(?P<threadSlug>[\w-]+)$', 'forum.views.edit_thread', name= 'edit_thread' ),
     url( r'^edit_category/(?P<categorySlug>[\w-]+)$', 'forum.views.edit_category', name= 'edit_category' ),
     url( r'^edit_sub_forum/(?P<forumSlug>[\w-]+)$', 'forum.views.edit_sub_forum', name= 'edit_sub_forum' ),
+
+    url( r'^remove/post_confirm/(?P<postId>\w+)$', 'forum.views.remove_post_confirm', name= 'remove_post_confirm' ),
+    url( r'^remove/post/(?P<postId>\w+)$', 'forum.views.remove_post', name= 'remove_post' ),
+    url( r'^remove/thread_confirm/(?P<threadSlug>[\w-]+)$', 'forum.views.remove_thread_confirm', name= 'remove_thread_confirm' ),
+    url( r'^remove/thread/(?P<threadSlug>[\w-]+)$', 'forum.views.remove_thread', name= 'remove_thread' ),
+
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
     url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),

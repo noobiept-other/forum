@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Remove thread?</h2>
+
+<p>{{ thread.title }}</p>
+<p>{{ thread.text }}</p>
+<p>By: {{ thread.user }}</p>
+<p>Sub-forum: {{ thread.sub_forum }}</p>
+
+<p>Do you really want to remove this?</p>
+
+<p>
+    <a href="{% url 'remove_thread' thread.slug %}">Yes</a>
+    <a href="{{ thread.get_url }}">No</a>
+</p>
+{% endblock %}

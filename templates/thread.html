@@ -24,6 +24,9 @@
                 {% if user == thread.user or user.is_moderator %}
                     <li><a href="{% url 'edit_thread' thread.slug %}">edit</a></li>
                 {% endif %}
+                {% if user.is_moderator %}
+                    <li><a href="{% url 'remove_thread_confirm' thread.slug %}">remove</a></li>
+                {% endif %}
             </ul>
          </td>
     </tr>
@@ -49,6 +52,9 @@
 
                 {% if user == post.user or user.is_moderator %}
                     <li><a href="{% url 'edit_post' post.id %}">edit</a></li>
+                {% endif %}
+                {% if user.is_moderator %}
+                    <li><a href="{% url 'remove_post_confirm' post.id %}">remove</a></li>
                 {% endif %}
             </ul>
         </td>

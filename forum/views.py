@@ -71,7 +71,7 @@ def sub_forum( request, forumSlug ):
     return render( request, 'sub_forum.html', context )
 
 
-def thread( request, threadSlug ):
+def open_thread( request, threadSlug ):
 
     try:
         theThread = Thread.objects.get( slug= threadSlug )
@@ -158,11 +158,11 @@ def user_page( request, username ):
     total_threads = threads.count()
 
     context = {
-        'username': username,
+        'pageUser': user,
         'last_posts': last_posts,
         'total_posts': total_posts,
         'last_threads': last_threads,
-        'total_threads': total_threads
+        'total_threads': total_threads,
     }
 
     return render( request, 'accounts/user_page.html', context )
@@ -463,3 +463,84 @@ def edit_sub_forum( request, forumSlug ):
     }
 
     return render( request, 'edit/edit_sub_forum.html', context )
+
+
+@login_required( login_url= 'login' )
+def remove_post_confirm( request, postId ):
+
+    try:
+        post = Post.objects.get( id= postId )
+
+    except Post.DoesNotExist:
+        raise Http404( "Post doesn't exist." )
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( 'Not a moderator.' )
+
+    context = {
+        'post': post
+    }
+
+    return render( request, 'remove/remove_post.html', context )
+
+
+@login_required( login_url= 'login' )
+def remove_post( request, postId ):
+
+    try:
+        post = Post.objects.get( id= postId )
+
+    except Post.DoesNotExist:
+        raise Http404( "Post doesn't exist." )
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( 'Not a moderator.' )
+
+    theThread = post.thread
+    post.delete()
+
+    return HttpResponseRedirect( theThread.get_url() )
+
+
+
+
+@login_required( login_url= 'login' )
+def remove_thread_confirm( request, threadSlug ):
+
+    try:
+        thread = Thread.objects.get( slug= threadSlug )
+
+    except Thread.DoesNotExist:
+        raise Http404( "Thread doesn't exist." )
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( 'Not a moderator.' )
+
+    context = {
+        'thread': thread
+    }
+
+    return render( request, 'remove/remove_thread.html', context )
+
+
+@login_required( login_url= 'login' )
+def remove_thread( request, threadSlug ):
+
+    try:
+        thread = Thread.objects.get( slug= threadSlug )
+
+    except Thread.DoesNotExist:
+        raise Http404( "Thread doesn't exist." )
+
+    if not request.user.is_moderator:
+        return HttpResponseForbidden( 'Not a moderator.' )
+
+    posts = Post.objects.filter( thread= thread )
+
+    for post in posts:
+        post.delete()
+
+    forum = thread.sub_forum
+    thread.delete()
+
+    return HttpResponseRedirect( forum.get_url() )

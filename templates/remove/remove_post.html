@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Remove post?</h2>
+
+<p>{{ post.text }}</p>
+<p>By: {{ post.user }}</p>
+<p>Thread: {{ post.thread }}</p>
+<p>Sub-forum: {{ post.sub_forum }}</p>
+
+<p>Do you really want to remove this?</p>
+
+<p>
+    <a href="{% url 'remove_post' post.id %}">Yes</a>
+    <a href="{{ post.get_url }}">No</a>
+</p>
+{% endblock %}

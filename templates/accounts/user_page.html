@@ -1,22 +1,24 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
-<h2>Username: {{ username }}</h2>
+<h2>Username: {{ pageUser.username }}</h2>
 
+<p>Joined: {{ pageUser.date_joined }} ({{ pageUser.date_joined|naturaltime }})</p>
 <p>Total posts: {{ total_posts }}</p>
 <p>Total threads: {{ total_threads }}</p>
 
 {% if user.is_authenticated %}
 
-    {% if user.username == username %}
+    {% if user.username == pageUser.username %}
         <ul>
             <li><a href="{% url 'check_message' %}">See messages.</a></li>
             <li><a>Change password.</a></li>
         </ul>
     {% else %}
         <ul>
-            <li><a href="{% url 'send_message' username %}">Send private message.</a></li>
+            <li><a href="{% url 'send_message' pageUser.username %}">Send private message.</a></li>
         </ul>
     {% endif %}
 {% endif %}
