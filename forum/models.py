@@ -77,6 +77,7 @@ class Post( models.Model ):
     user = models.ForeignKey( settings.AUTH_USER_MODEL )
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
+    date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
 
     def __unicode__(self):
         return self.text[:10]
@@ -93,6 +94,13 @@ class Post( models.Model ):
         url += '#post_' + str( position + 1 )
 
         return url
+
+    def was_edited(self):
+        if self.date_edited != self.date_created:
+            return True
+
+        return False
+
 
 class Profile( AbstractUser ):
 

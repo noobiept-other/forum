@@ -14,7 +14,7 @@
             {% endif %}
         </td>
         <td class="ThreadRight">
-            {{ thread.text }}
+            {{ thread.text|linebreaksbr }}
 
         {% if user == thread.user %}
             <ul class="postMenu">
@@ -36,13 +36,17 @@
             {% endif %}
         </td>
         <td class="ThreadRight">
-            {{ post.text }}
+            {{ post.text|linebreaksbr }}
 
-        {% if user == post.user %}
             <ul class="postMenu">
-                <li><a href="{% url 'edit_post' post.id %}">edit</a></li>
+                {% if post.was_edited %}
+                    edited: {{ post.date_edited|naturaltime }}
+                {% endif %}
+
+                {% if user == post.user %}
+                    <li><a href="{% url 'edit_post' post.id %}">edit</a></li>
+                {% endif %}
             </ul>
-        {% endif %}
         </td>
     </tr>
     {% endfor %}

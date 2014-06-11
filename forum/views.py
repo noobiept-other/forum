@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
+from django.utils import timezone
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
 from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm, CategoryForm, NewSubForumForm
@@ -340,6 +341,7 @@ def edit_post( request, postId ):
             text = form.cleaned_data[ 'text' ]
 
             post.text = text
+            post.date_edited = timezone.localtime( timezone.now() )
             post.save()
 
             return HttpResponseRedirect( post.get_url() )
