@@ -18,7 +18,13 @@
 
         {% if user == thread.user %}
             <ul class="postMenu">
-                <li><a>edit</a></li>
+                {% if thread.was_edited %}
+                    <li>edited: {{ thread.date_edited|naturaltime }}</li>
+                {% endif %}
+
+                {% if user == thread.user %}
+                    <li><a href="{% url 'edit_thread' thread.slug %}">edit</a></li>
+                {% endif %}
             </ul>
         {% endif %}
         </td>
@@ -40,7 +46,7 @@
 
             <ul class="postMenu">
                 {% if post.was_edited %}
-                    edited: {{ post.date_edited|naturaltime }}
+                    <li>edited: {{ post.date_edited|naturaltime }}</li>
                 {% endif %}
 
                 {% if user == post.user %}

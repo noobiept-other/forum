@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url( r'new_sub_forum/(?P<categorySlug>[\w-]+)', 'forum.views.new_sub_forum', name= 'new_sub_forum' ),
 
     url( r'edit_post/(?P<postId>\w+)', 'forum.views.edit_post', name= 'edit_post' ),
+    url( r'edit_thread/(?P<threadSlug>[\w-]+)', 'forum.views.edit_thread', name= 'edit_thread' ),
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
     url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),

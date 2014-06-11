@@ -3,12 +3,11 @@ from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.template.defaultfilters import slugify
 from django.utils import timezone
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
-from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, NewThreadForm, CategoryForm, NewSubForumForm
-
+from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, NewSubForumForm
+import forum.utilities as utilities
 
 def index( request ):
 
@@ -56,10 +55,10 @@ def sub_forum( request, forumSlug ):
         last = aThread.get_last_post()
 
         if last:
-            return last.date_created
+            return last.date_edited
 
         else:
-            return aThread.date_created
+            return aThread.date_edited
 
     ordered = sorted( threads, key= sortThreads, reverse= True )
 
@@ -115,23 +114,21 @@ def new_thread( request, forumSlug ):
 
 
     if request.method == 'POST':
-        form = NewThreadForm( request.POST )
+        form = ThreadForm( request.POST )
 
         if form.is_valid():
 
             title = form.cleaned_data[ 'title' ]
             content = form.cleaned_data[ 'content' ]
 
-            #HERE the slug has to be unique...
-            slug = slugify( title )
-
-            theThread = Thread( sub_forum= forum, user= request.user, title= title, slug= slug, text= content )
+            theThread = Thread( sub_forum= forum, user= request.user, title= title, slug= '', text= content )
+            utilities.unique_slugify( theThread, title )
             theThread.save()
 
-            return HttpResponseRedirect( reverse( 'thread', args= [ slug ] ) )
+            return HttpResponseRedirect( theThread.get_url() )
 
     else:
-        form = NewThreadForm()
+        form = ThreadForm()
 
 
     context = {
@@ -266,8 +263,8 @@ def new_category( request ):
         if form.is_valid():
 
             categoryName = form.cleaned_data[ 'category' ]
-            categorySlug = slugify( categoryName )
-            category = Category( name= categoryName, slug= categorySlug )
+            category = Category( name= categoryName, slug= '' )
+            utilities.unique_slugify( category, categoryName )
             category.save()
 
             return HttpResponseRedirect( reverse( 'index' ) )
@@ -302,9 +299,9 @@ def new_sub_forum( request, categorySlug ):
         if form.is_valid():
 
             forumName = form.cleaned_data[ 'forumName' ]
-            forumSlug = slugify( forumName )
 
-            forum = SubForum( name= forumName, slug= forumSlug, category= category )
+            forum = SubForum( name= forumName, slug= '', category= category )
+            utilities.unique_slugify( forum, forumName )
             forum.save()
 
             return HttpResponseRedirect( reverse( 'index' ) )
@@ -355,3 +352,42 @@ def edit_post( request, postId ):
     }
 
     return render( request, 'edit_post.html', context )
+
+
+@login_required( login_url= 'login' )
+def edit_thread( request, threadSlug ):
+
+    try:
+        theThread = Thread.objects.get( slug= threadSlug )
+
+    except Thread.DoesNotExist:
+        raise Http404( "Thread doesn't exist." )
+
+    if request.user != theThread.user:
+        return HttpResponseForbidden( "Not your thread." )
+
+
+    if request.method == 'POST':
+        form = ThreadForm( request.POST )
+
+        if form.is_valid():
+            title = form.cleaned_data[ 'title' ]
+            content = form.cleaned_data[ 'content' ]
+
+            theThread.title = title
+            theThread.text = content
+            theThread.date_edited = timezone.localtime( timezone.now() )
+            utilities.unique_slugify( theThread, title )
+            theThread.save()
+
+            return HttpResponseRedirect( theThread.get_url() )
+
+    else:
+        form = ThreadForm( initial= { 'title': theThread.title, 'content': theThread.text } )
+
+    context = {
+        'form': form,
+        'thread': theThread
+    }
+
+    return render( request, 'edit_thread.html', context )

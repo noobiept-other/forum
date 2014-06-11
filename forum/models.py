@@ -49,6 +49,7 @@ class Thread( models.Model ):
     slug = models.SlugField( max_length= 100, unique= True )    # for the url
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
+    date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
 
     def __unicode__(self):
         return self.title
@@ -68,6 +69,12 @@ class Thread( models.Model ):
 
     def get_post_count(self):
         return self.post_set.all().count()
+
+    def was_edited(self):
+        if self.date_edited != self.date_created:
+            return True
+
+        return False
 
 
 class Post( models.Model ):
