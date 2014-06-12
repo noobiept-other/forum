@@ -27,10 +27,13 @@ urlpatterns = patterns('',
     url( r'^remove/sub_forum/(?P<forumSlug>[\w-]+)$', 'forum.views.remove_sub_forum', name= 'remove_sub_forum' ),
     url( r'^remove/category_confirm/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category_confirm', name= 'remove_category_confirm' ),
     url( r'^remove/category/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category', name= 'remove_category' ),
+    url( r'^remove/user_confirm/(?P<username>\w+)$', 'forum.views.remove_user_confirm', name= 'remove_user_confirm' ),
+    url( r'^remove/user/(?P<username>\w+)$', 'forum.views.remove_user', name= 'remove_user' ),
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
     url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),
     url( r'^accounts/new$', 'forum.views.new_account', name= 'new_account' ),
+    url( r'^accounts/change_password$', 'django.contrib.auth.views.password_change', { 'template_name': 'accounts/change_password.html', 'post_change_redirect': '/' }, name= 'change_password' ),
 
     url( r'^accounts/user/(?P<username>\w+)$', 'forum.views.user_page', name= 'user_page' ),
 

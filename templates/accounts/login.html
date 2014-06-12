@@ -9,7 +9,7 @@
 {% endif %}
 
 <form method="post" action="{% url 'login' %}">
-    <span>{% csrf_token %}</span>
+    {% csrf_token %}
 
     <table>
         <tr>

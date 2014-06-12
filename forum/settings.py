@@ -124,6 +124,9 @@ LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'forum.Profile'
 
+RETIRED_USERNAME = 'user_no_more'
+RETIRED_PASSWORD = 'a'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',

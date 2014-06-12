@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.conf import settings
 
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
 from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, SubForumForm
@@ -605,5 +606,53 @@ def remove_category( request, categorySlug ):
         forum.delete()
 
     category.delete()
+
+    return HttpResponseRedirect( reverse( 'index' ) )
+
+
+@must_be_moderator
+def remove_user_confirm( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    context = {
+        'user_to_remove': user
+    }
+
+    return render( request, 'remove/remove_user.html', context )
+
+
+@must_be_moderator
+def remove_user( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    retiredUser = userModel.objects.get( username= settings.RETIRED_USERNAME )
+
+    for thread in user.thread_set.all():
+
+        thread.user = retiredUser
+        thread.save()
+
+    for post in user.post_set.all():
+
+        post.user = retiredUser
+        post.save()
+
+        # don't really need to save the private messages, so that will be removed
+
+    user.delete()
 
     return HttpResponseRedirect( reverse( 'index' ) )

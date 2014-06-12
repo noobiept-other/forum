@@ -3,7 +3,13 @@
 
 {% block content %}
 
-<h2>Username: {{ pageUser.username }}</h2>
+<h2>
+    Username: {{ pageUser.username }}
+
+    {% if user.is_moderator %}
+        <a href="{% url 'remove_user_confirm' pageUser.username %}">remove</a>
+    {% endif %}
+</h2>
 
 <p>Joined: {{ pageUser.date_joined }} ({{ pageUser.date_joined|naturaltime }})</p>
 
@@ -12,7 +18,7 @@
     {% if user.username == pageUser.username %}
         <ul>
             <li><a href="{% url 'check_message' %}">See messages.</a></li>
-            <li><a>Change password.</a></li>
+            <li><a href="{% url 'change_password' %}">Change password.</a></li>
         </ul>
     {% else %}
         <ul>
