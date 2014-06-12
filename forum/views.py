@@ -209,7 +209,7 @@ def send_private_message( request, username ):
             message = PrivateMessage( receiver= user, sender= request.user, title= title, content= content )
             message.save()
 
-            return HttpResponseRedirect( reverse( 'user_page',  args= [ request.user.username ] ) )
+            return HttpResponseRedirect( reverse( 'user_page',  args= [ user.username ] ) )
 
     else:
         form = PrivateMessageForm()
@@ -243,12 +243,28 @@ def open_message( request, messageId ):
     except PrivateMessage.DoesNotExist:
         raise Http404( "Message doesn't exist" )
 
-
     context = {
         'message': message
     }
 
     return render( request, 'accounts/open_message.html', context )
+
+@login_required( login_url= 'login' )
+def remove_message( request, messageId ):
+
+    try:
+        message = PrivateMessage.objects.get( id= messageId )
+
+    except PrivateMessage.DoesNotExist:
+        raise Http404( "Message doesn't exist." )
+
+    if message.receiver != request.user:
+        return HttpResponseForbidden( "Not your message." )
+
+    message.delete()
+
+    return HttpResponseRedirect( reverse( 'check_message' ) )
+
 
 
 @must_be_moderator

@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url( r'^accounts/check_message/$', 'forum.views.check_message', name='check_message'),
 
     url( r'^accounts/check_message/(?P<messageId>\w+)$', 'forum.views.open_message', name= 'open_message' ),
-
+    url( r'^accounts/remove_message/(?P<messageId>\w+)$', 'forum.views.remove_message', name= 'remove_message' ),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

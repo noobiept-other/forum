@@ -1,18 +1,22 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
 {% if messages %}
 
-    <table>
+    <table id="CheckMessagesTable">
         <tr>
-            <th>From</th>
+            <th>from</th>
             <th>title</th>
+            <th>date</th>
         </tr>
         {% for message in messages %}
-            <tr>
-                <td><a href="{% url 'open_message' message.id %}">{{ message.sender }}</a></td>
+            <tr class="clickableRow" data-url="{{ message.get_url }}">
+                <td><a href="{{ message.get_url }}">{{ message.sender }}</a></td>
                 <td>{{ message.title|truncatewords:20 }}</td>
+                <td>{{ message.date_created|naturaltime }}</td>
+                <td><a href="{% url 'remove_message' message.id %}">X</a></td>
             </tr>
         {% endfor %}
     </table>

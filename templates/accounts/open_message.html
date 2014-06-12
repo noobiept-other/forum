@@ -1,11 +1,15 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
-<p>From {{ message.sender }}</p>
+<p>From <a href="{{ message.sender.get_url }}">{{ message.sender }}</a> {{ message.date_created|naturaltime }}</p>
 
-<p>{{ message.title }}</p>
+<h2>{{ message.title }}</h2>
 
 <p>{{ message.content }}</p>
+
+<a href="{% url 'send_message' message.sender %}">reply</a>
+<a href="{{ user.get_url }}">back</a>
 
 {% endblock %}

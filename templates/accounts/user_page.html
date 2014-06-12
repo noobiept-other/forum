@@ -6,8 +6,6 @@
 <h2>Username: {{ pageUser.username }}</h2>
 
 <p>Joined: {{ pageUser.date_joined }} ({{ pageUser.date_joined|naturaltime }})</p>
-<p>Total posts: {{ total_posts }}</p>
-<p>Total threads: {{ total_threads }}</p>
 
 {% if user.is_authenticated %}
 
@@ -23,26 +21,34 @@
     {% endif %}
 {% endif %}
 
-<h2>Last posts</h2>
+<h3>Last posts (total: {{ total_posts }})</h3>
 
 {% if last_posts %}
-    <ul>
+    <table class="UserPageTable">
         {% for post in last_posts %}
-            <li><a href="{{ post.get_url }}">{{ post.text|truncatechars:20 }}</a></li>
+            <tr>
+                <td><a href="{{ post.get_url }}">{{ post.text|truncatechars:20 }}</a></td>
+                <td><a href="{{ post.thread.get_url }}">{{ post.thread }}</a></td>
+                <td>{{ post.date_edited|naturaltime }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>No posts.</p>
 {% endif %}
 
-<h2>Last threads</h2>
+<h3>Last threads (total: {{ total_threads }})</h3>
 
 {% if last_threads %}
-    <ul>
+    <table class="UserPageTable">
         {% for thread in last_threads %}
-            <li><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:20 }}</a></li>
+            <tr>
+                <td><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:20 }}</a></td>
+                <td>posts: {{ thread.get_post_count }}</td>
+                <td>{{ thread.date_edited|naturaltime }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>No threads.</p>
 {% endif %}
