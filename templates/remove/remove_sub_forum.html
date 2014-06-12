@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Remove sub-forum?</h2>
+
+<p>name: {{ forum.name }}</p>
+<p>category: {{ forum.category }}</p>
+<p>With {{ forum.thread_set.all.count }} threads</p>
+
+<p>Do you really want to remove this?</p>
+
+<p>
+    <a href="{% url 'remove_sub_forum' forum.slug %}">Yes</a>
+    <a href="{{ forum.get_url }}">No</a>
+</p>
+{% endblock %}

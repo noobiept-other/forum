@@ -18,6 +18,7 @@
             <p>
                 <a href="{% url 'new_sub_forum' category.slug %}">New sub-forum</a>
                 <a href="{% url 'edit_category' category.slug %}">edit</a>
+                <a href="{% url 'remove_category_confirm' category.slug %}">remove</a>
             </p>
         {% endif %}
 

@@ -23,7 +23,10 @@ urlpatterns = patterns('',
     url( r'^remove/post/(?P<postId>\w+)$', 'forum.views.remove_post', name= 'remove_post' ),
     url( r'^remove/thread_confirm/(?P<threadSlug>[\w-]+)$', 'forum.views.remove_thread_confirm', name= 'remove_thread_confirm' ),
     url( r'^remove/thread/(?P<threadSlug>[\w-]+)$', 'forum.views.remove_thread', name= 'remove_thread' ),
-
+    url( r'^remove/sub_forum_confirm/(?P<forumSlug>[\w-]+)$', 'forum.views.remove_sub_forum_confirm', name= 'remove_sub_forum_confirm' ),
+    url( r'^remove/sub_forum/(?P<forumSlug>[\w-]+)$', 'forum.views.remove_sub_forum', name= 'remove_sub_forum' ),
+    url( r'^remove/category_confirm/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category_confirm', name= 'remove_category_confirm' ),
+    url( r'^remove/category/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category', name= 'remove_category' ),
 
     url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
     url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),

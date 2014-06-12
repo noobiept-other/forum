@@ -511,12 +511,83 @@ def remove_thread( request, threadSlug ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
-    posts = Post.objects.filter( thread= thread )
-
-    for post in posts:
+    for post in thread.post_set.all():
         post.delete()
 
     forum = thread.sub_forum
     thread.delete()
 
     return HttpResponseRedirect( forum.get_url() )
+
+@must_be_moderator
+def remove_sub_forum_confirm( request, forumSlug ):
+
+    try:
+        forum = SubForum.objects.get( slug= forumSlug )
+
+    except SubForum.DoesNotExist:
+        raise Http404( "Sub-forum doesn't exist." )
+
+    context = {
+        'forum': forum
+    }
+
+    return render( request, 'remove/remove_sub_forum.html', context )
+
+@must_be_moderator
+def remove_sub_forum( request, forumSlug ):
+
+    try:
+        forum = SubForum.objects.get( slug= forumSlug )
+
+    except SubForum.DoesNotExist:
+        raise Http404( "Sub-forum doesn't exist." )
+
+    for thread in forum.thread_set.all():
+        for post in thread.post_set.all():
+            post.delete()
+
+        thread.delete()
+
+    forum.delete()
+
+    return HttpResponseRedirect( reverse( 'index' ) )
+
+
+@must_be_moderator
+def remove_category_confirm( request, categorySlug ):
+
+    try:
+        category = Category.objects.get( slug= categorySlug )
+
+    except Category.DoesNotExist:
+        raise Http404( "Category doesn't exist." )
+
+    context = {
+        'category': category
+    }
+
+    return render( request, 'remove/remove_category.html', context )
+
+
+@must_be_moderator
+def remove_category( request, categorySlug ):
+
+    try:
+        category = Category.objects.get( slug= categorySlug )
+
+    except Category.DoesNotExist:
+        raise Http404( "Category doesn't exist." )
+
+    for forum in category.subforum_set.all():
+        for thread in forum.thread_set.all():
+            for post in thread.post_set.all():
+                post.delete()
+
+            thread.delete()
+
+        forum.delete()
+
+    category.delete()
+
+    return HttpResponseRedirect( reverse( 'index' ) )
