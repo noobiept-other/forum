@@ -8,6 +8,7 @@ from django.utils import timezone
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
 from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, SubForumForm
 import forum.utilities as utilities
+from forum.decorators import must_be_moderator
 
 def index( request ):
 
@@ -250,12 +251,8 @@ def open_message( request, messageId ):
     return render( request, 'accounts/open_message.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def new_category( request ):
-
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( "Not a moderator." )
-
 
     if request.method == 'POST':
         form = CategoryForm( request.POST )
@@ -279,11 +276,8 @@ def new_category( request ):
     return render( request, 'new/new_category.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def new_sub_forum( request, categorySlug ):
-
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( "Not a moderator." )
 
     try:
         category = Category.objects.get( slug= categorySlug )
@@ -395,7 +389,7 @@ def edit_thread( request, threadSlug ):
     return render( request, 'edit/edit_thread.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def edit_category( request, categorySlug ):
 
     try:
@@ -403,9 +397,6 @@ def edit_category( request, categorySlug ):
 
     except Category.DoesNotExist:
         raise Http404( "Category doesn't exist." )
-
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( "Not a moderator." )
 
     if request.method == 'POST':
         form = CategoryForm( request.POST )
@@ -430,7 +421,7 @@ def edit_category( request, categorySlug ):
     return render( request, 'edit/edit_category.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def edit_sub_forum( request, forumSlug ):
 
     try:
@@ -438,9 +429,6 @@ def edit_sub_forum( request, forumSlug ):
 
     except SubForum.DoesNotExist:
         raise Http404( "Sub-forum doesn't exist." )
-
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( "Not a moderator." )
 
     if request.method == 'POST':
         form = SubForumForm( request.POST )
@@ -465,7 +453,7 @@ def edit_sub_forum( request, forumSlug ):
     return render( request, 'edit/edit_sub_forum.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def remove_post_confirm( request, postId ):
 
     try:
@@ -474,9 +462,6 @@ def remove_post_confirm( request, postId ):
     except Post.DoesNotExist:
         raise Http404( "Post doesn't exist." )
 
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( 'Not a moderator.' )
-
     context = {
         'post': post
     }
@@ -484,7 +469,7 @@ def remove_post_confirm( request, postId ):
     return render( request, 'remove/remove_post.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def remove_post( request, postId ):
 
     try:
@@ -492,9 +477,6 @@ def remove_post( request, postId ):
 
     except Post.DoesNotExist:
         raise Http404( "Post doesn't exist." )
-
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( 'Not a moderator.' )
 
     theThread = post.thread
     post.delete()
@@ -504,7 +486,7 @@ def remove_post( request, postId ):
 
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def remove_thread_confirm( request, threadSlug ):
 
     try:
@@ -513,9 +495,6 @@ def remove_thread_confirm( request, threadSlug ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( 'Not a moderator.' )
-
     context = {
         'thread': thread
     }
@@ -523,7 +502,7 @@ def remove_thread_confirm( request, threadSlug ):
     return render( request, 'remove/remove_thread.html', context )
 
 
-@login_required( login_url= 'login' )
+@must_be_moderator
 def remove_thread( request, threadSlug ):
 
     try:
@@ -531,9 +510,6 @@ def remove_thread( request, threadSlug ):
 
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
-
-    if not request.user.is_moderator:
-        return HttpResponseForbidden( 'Not a moderator.' )
 
     posts = Post.objects.filter( thread= thread )
 
