@@ -45,7 +45,7 @@ def index( request ):
     return render( request, 'index.html', context )
 
 
-def sub_forum( request, forumSlug ):
+def sub_forum( request, forumSlug, page= 0 ):
 
     try:
         forum = SubForum.objects.get( slug= forumSlug )
@@ -66,9 +66,22 @@ def sub_forum( request, forumSlug ):
 
     ordered = sorted( threads, key= sortThreads, reverse= True )
 
+    threadsPerPage = settings.THREADS_PER_PAGE
+    page = int( page )
+    startThread = page * threadsPerPage
+    totalThreads = len( ordered )
+    totalPages = int( math.ceil( float(totalThreads) / float(threadsPerPage) ) )
+
+    if page != 0 and startThread >= totalThreads:
+        raise Http404( "Invalid sub-forum page." )
+
+    pageThreads = ordered[ startThread : startThread + threadsPerPage ]
+
     context = {
-        'threads': ordered,
+        'threads': pageThreads,
         'forumSlug': forumSlug,
+        'page': page,
+        'pages': range( 0, totalPages ),
         'paths': [ forum ]
     }
 
@@ -103,7 +116,7 @@ def open_thread( request, threadSlug, page= 0 ):
 
     allPosts = theThread.post_set.all()
     totalPosts = allPosts.count()
-    totalPages = int( math.ceil( totalPosts / postPerPage ) )
+    totalPages = int( math.ceil( float(totalPosts) / float(postPerPage) ) )
 
     if page != 0 and startPost >= totalPosts:
         raise Http404( "Invalid thread page." )
@@ -115,7 +128,7 @@ def open_thread( request, threadSlug, page= 0 ):
         'posts': pagePosts,
         'threadSlug': threadSlug,
         'page': page,
-        'pages': range( 0, totalPages + 1 ),
+        'pages': range( 0, totalPages ),
         'form': form,
         'paths': [ theThread.sub_forum, theThread ]
     }

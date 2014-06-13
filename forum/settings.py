@@ -127,7 +127,8 @@ AUTH_USER_MODEL = 'forum.Profile'
 RETIRED_USERNAME = 'user_no_more'
 RETIRED_PASSWORD = 'a'
 
-POSTS_PER_PAGE = 10
+POSTS_PER_PAGE = 10     # in a thread
+THREADS_PER_PAGE = 10   # in a sub-forum
 
 INSTALLED_APPS = (
     'django.contrib.auth',

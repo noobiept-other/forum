@@ -23,7 +23,7 @@ class SubForum( models.Model ):
         return self.name
 
     def get_url(self):
-        return reverse( 'subForum', args= [ self.slug ] )
+        return reverse( 'subForum', args= [ self.slug, 0 ] )
 
     def get_last_post(self):
 

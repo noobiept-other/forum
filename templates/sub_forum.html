@@ -11,6 +11,18 @@
     {% endif %}
 </p>
 
+<p>
+{% for pageNumber in pages %}
+    <a href="{% url 'subForum' forumSlug pageNumber %}" class="PageLink">
+        {% if pageNumber == page %}
+            <em>{{ pageNumber }}</em>
+        {% else %}
+            {{ pageNumber }}
+        {% endif %}
+    </a>
+{% endfor %}
+</p>
+
 {% if threads %}
     <table id="SubForumTable">
     {% for thread in threads %}
@@ -28,6 +40,19 @@
         </tr>
     {% endfor %}
     </table>
+
+    <p>
+    {% for pageNumber in pages %}
+        <a href="{% url 'subForum' forumSlug pageNumber %}" class="PageLink">
+            {% if pageNumber == page %}
+                <em>{{ pageNumber }}</em>
+            {% else %}
+                {{ pageNumber }}
+            {% endif %}
+        </a>
+    {% endfor %}
+    </p>
+
 {% else %}
     <p>No threads.</p>
 {% endif %}
