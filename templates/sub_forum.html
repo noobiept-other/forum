@@ -20,7 +20,7 @@
             <td>posts: {{ thread.get_post_count }}</td>
             <td>lastest post:
                 {% if thread.get_last_post %}
-                    <a href="{% url 'thread' thread.get_last_post.thread.slug %}">{{ thread.get_last_post.text|truncatechars:10 }}</a> by <a href="{% url 'user_page' thread.get_last_post.user.username %}">{{ thread.get_last_post.user }}</a> {{ thread.get_last_post.date_created|naturaltime }}
+                    <a href="{% url 'thread' thread.get_last_post.thread.slug 0 %}">{{ thread.get_last_post.text|truncatechars:10 }}</a> by <a href="{% url 'user_page' thread.get_last_post.user.username %}">{{ thread.get_last_post.user }}</a> {{ thread.get_last_post.date_created|naturaltime }}
                 {% else %}
                     ---
                 {% endif %}

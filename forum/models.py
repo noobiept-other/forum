@@ -56,7 +56,7 @@ class Thread( models.Model ):
         return self.title
 
     def get_url(self):
-        return reverse( 'thread', args= [ self.slug ] )
+        return reverse( 'thread', args= [ self.slug, 0 ] )
 
     def get_last_post(self):
 
@@ -98,7 +98,14 @@ class Post( models.Model ):
             if post == self:
                 position = index
 
-        url = reverse( 'thread', args= [ self.thread.slug ] )
+        postsPerPage = settings.POSTS_PER_PAGE
+        page = 0
+
+        while position >= postsPerPage:
+            position -= postsPerPage
+            page += 1
+
+        url = reverse( 'thread', args= [ self.thread.slug, page ] )
 
         url += '#post_' + str( position + 1 )
 

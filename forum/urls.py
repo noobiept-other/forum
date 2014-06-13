@@ -8,7 +8,7 @@ urlpatterns = patterns('',
 
     url( r'^$', 'forum.views.index', name= 'index' ),
     url( r'^forum/(?P<forumSlug>[\w-]+)$', 'forum.views.sub_forum', name= 'subForum' ),
-    url( r'^thread/(?P<threadSlug>[\w-]+)$', 'forum.views.open_thread', name= 'thread' ),
+    url( r'^thread/(?P<threadSlug>[\w-]+)/(?P<page>[0-9]+)$', 'forum.views.open_thread', name= 'thread' ),
 
     url( r'^new_thread/(?P<forumSlug>[\w-]+)$', 'forum.views.new_thread', name= 'new_thread' ),
     url( r'^new_category$', 'forum.views.new_category', name= 'new_category' ),

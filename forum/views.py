@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.conf import settings
 
+import math
+
 from forum.models import Category, SubForum, Thread, Post, PrivateMessage
 from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, SubForumForm
 import forum.utilities as utilities
@@ -73,7 +75,7 @@ def sub_forum( request, forumSlug ):
     return render( request, 'sub_forum.html', context )
 
 
-def open_thread( request, threadSlug ):
+def open_thread( request, threadSlug, page= 0 ):
 
     try:
         theThread = Thread.objects.get( slug= threadSlug )
@@ -95,9 +97,25 @@ def open_thread( request, threadSlug ):
     else:
         form = PostForm()
 
+    postPerPage = settings.POSTS_PER_PAGE
+    page = int( page )
+    startPost = page * postPerPage
+
+    allPosts = theThread.post_set.all()
+    totalPosts = allPosts.count()
+    totalPages = int( math.ceil( totalPosts / postPerPage ) )
+
+    if page != 0 and startPost >= totalPosts:
+        raise Http404( "Invalid thread page." )
+
+    pagePosts = allPosts[ startPost : startPost + postPerPage ]
+
     context = {
         'thread': theThread,
+        'posts': pagePosts,
         'threadSlug': threadSlug,
+        'page': page,
+        'pages': range( 0, totalPages + 1 ),
         'form': form,
         'paths': [ theThread.sub_forum, theThread ]
     }

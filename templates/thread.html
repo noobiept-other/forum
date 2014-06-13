@@ -4,8 +4,21 @@
 {% block content %}
 {% if thread %}
 
+<p>
+{% for pageNumber in pages %}
+    <a href="{% url 'thread' threadSlug pageNumber %}" class="PageLink">
+        {% if pageNumber == page %}
+            <em>{{ pageNumber }}</em>
+        {% else %}
+            {{ pageNumber }}
+        {% endif %}
+    </a>
+{% endfor %}
+</p>
+
+
 <table id="ThreadTable">
-    <tr id="post_0">
+    <tr id="post_0" class="ThreadRow">
         <td class="ThreadLeft">
             <a href="{{ thread.user.get_url }}">{{ thread.user }}</a> {{ thread.date_created|naturaltime }}<br />
             {{ thread.user.get_post_count }} posts<br />
@@ -32,9 +45,9 @@
     </tr>
 
 
-{% if thread.post_set.all %}
-    {% for post in thread.post_set.all %}
-    <tr id="post_{{ forloop.counter }}">
+{% if posts %}
+    {% for post in posts %}
+    <tr id="post_{{ forloop.counter }}" class="PostRow">
         <td class="ThreadLeft">
             <a href="{{ post.user.get_url }}">{{ post.user }}</a> {{ post.date_created|naturaltime }}<br />
             {{ post.user.get_post_count }} posts<br />
@@ -63,21 +76,33 @@
 {% endif %}
 </table>
 
-    {% if user.is_authenticated %}
-        {% if form.errors %}
-            <p>{{ form.errors }}</p>
+<p>
+{% for pageNumber in pages %}
+    <a href="{% url 'thread' threadSlug pageNumber %}" class="PageLink">
+        {% if pageNumber == page %}
+            <em>{{ pageNumber }}</em>
+        {% else %}
+            {{ pageNumber }}
         {% endif %}
-        <form id="ThreadPostForm" method="post" action="{% url 'thread' threadSlug %}">
-            {% csrf_token %}
+    </a>
+{% endfor %}
+</p>
 
-            {{ form.text }}
-
-            <input type="submit" value="post" />
-            <input type="hidden" name="next" value="{{ next }}" />
-        </form>
-    {% else %}
-        <p>Need to login to post.</p>
+{% if user.is_authenticated %}
+    {% if form.errors %}
+        <p>{{ form.errors }}</p>
     {% endif %}
+    <form id="ThreadPostForm" method="post" action="{% url 'thread' threadSlug page %}">
+        {% csrf_token %}
+
+        {{ form.text }}
+
+        <input type="submit" value="post" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+{% else %}
+    <p>Need to login to post.</p>
+{% endif %}
 {% else %}
     <p>No thread.</p>
 {% endif %}

@@ -37,6 +37,17 @@ ul
     list-style-type: none;
     }
 
+.PageLink
+    {
+    display: inline-block;
+    }
+
+.PageLink em
+    {
+    font-weight: bold;
+    font-style: normal;
+    }
+
     /* menu */
 
 #Menu li
@@ -108,6 +119,16 @@ ul
 .ThreadRight
     {
     background-color: rgba(229, 214, 237, 0.05);
+    }
+
+.ThreadRow .ThreadLeft
+    {
+    background-color: rgba(201, 219, 237, 0.83);
+    }
+
+.ThreadRow .ThreadRight
+    {
+    background-color: rgba(234, 244, 255, 0.74);
     }
 
 #ThreadTable
