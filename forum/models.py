@@ -49,6 +49,7 @@ class Thread( models.Model ):
     slug = models.SlugField( max_length= 100, unique= True )    # for the url
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
+    was_edited = models.BooleanField( default= False )
     date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the thread.', blank= True, null= True, related_name= 'thread_edited_by' )
     is_locked = models.BooleanField( default= False, help_text= 'if you can add new posts to the thread or not.' )
@@ -72,12 +73,6 @@ class Thread( models.Model ):
     def get_post_count(self):
         return self.post_set.all().count()
 
-    def was_edited(self):
-        if self.date_edited != self.date_created:
-            return True
-
-        return False
-
 
 class Post( models.Model ):
 
@@ -85,6 +80,7 @@ class Post( models.Model ):
     thread = models.ForeignKey( Thread )
     user = models.ForeignKey( settings.AUTH_USER_MODEL )
     text = models.TextField( max_length= 1000 )
+    was_edited = models.BooleanField( default= False )
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
     date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the post.', blank= True, null= True, related_name= 'post_edited_by' )
@@ -111,12 +107,6 @@ class Post( models.Model ):
         url += '#post_' + str( position + 1 )
 
         return url
-
-    def was_edited(self):
-        if self.date_edited != self.date_created:
-            return True
-
-        return False
 
 
 class Profile( AbstractUser ):

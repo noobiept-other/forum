@@ -380,6 +380,7 @@ def edit_post( request, postId ):
             text = form.cleaned_data[ 'text' ]
 
             post.text = text
+            post.was_edited = True
             post.date_edited = timezone.localtime( timezone.now() )
             post.edited_by = request.user
             post.save()
@@ -419,6 +420,7 @@ def edit_thread( request, threadSlug ):
 
             theThread.title = title
             theThread.text = content
+            theThread.was_edited = True
             theThread.date_edited = timezone.localtime( timezone.now() )
             theThread.edited_by = request.user
             utilities.unique_slugify( theThread, title )

@@ -25,5 +25,9 @@ def create_retired_user():
         user_no_more = Profile( username= username )
         user_no_more.set_password( password )
         user_no_more.save()
+        print 'Retired user created: {}'.format( username )
+
+    else:
+        print 'Retired user already created: {}'.format( username )
 
 startup()
