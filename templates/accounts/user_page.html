@@ -9,6 +9,16 @@
     {% if user.is_moderator %}
         <a href="{% url 'remove_user_confirm' pageUser.username %}">remove</a>
     {% endif %}
+
+    {% if user.is_staff %}
+        <a href="{% url 'set_moderator' pageUser.username %}">
+            {% if pageUser.is_moderator %}
+                un-mod
+            {% else %}
+                mod
+            {% endif %}
+        </a>
+    {% endif %}
 </h2>
 
 <p>Joined: {{ pageUser.date_joined }} ({{ pageUser.date_joined|naturaltime }})</p>

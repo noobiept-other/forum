@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url( r'^new_sub_forum/(?P<categorySlug>[\w-]+)$', 'forum.views.new_sub_forum', name= 'new_sub_forum' ),
 
     url( r'^lock_thread/(?P<threadSlug>[\w-]+)$', 'forum.views.lock_thread', name= 'lock_thread' ),
+    url( r'^set_moderator/(?P<username>\w+)$', 'forum.views.set_moderator', name= 'set_moderator' ),
 
     url( r'^edit_post/(?P<postId>\w+)$', 'forum.views.edit_post', name= 'edit_post' ),
     url( r'^edit_thread/(?P<threadSlug>[\w-]+)$', 'forum.views.edit_thread', name= 'edit_thread' ),

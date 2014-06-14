@@ -11,3 +11,14 @@ def must_be_moderator( function ):
         return function( request, *args, **kwargs )
 
     return func_wrapper
+
+def must_be_staff( function ):
+
+    @login_required( login_url= 'login' )
+    def func_wrapper( request, *args, **kwargs ):
+        if not request.user.is_staff:
+            return HttpResponseForbidden( "Not a staff member." )
+
+        return function( request, *args, **kwargs )
+
+    return func_wrapper
