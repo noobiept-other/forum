@@ -38,6 +38,13 @@
                     <li><a href="{% url 'edit_thread' thread.slug %}">edit</a></li>
                 {% endif %}
                 {% if user.is_moderator %}
+                    <li><a href="{% url 'lock_thread' thread.slug %}">
+                        {% if thread.is_locked %}
+                            unlock
+                        {% else %}
+                            lock
+                        {% endif %}
+                    </a></li>
                     <li><a href="{% url 'remove_thread_confirm' thread.slug %}">remove</a></li>
                 {% endif %}
             </ul>
@@ -88,21 +95,26 @@
 {% endfor %}
 </p>
 
-{% if user.is_authenticated %}
-    {% if form.errors %}
-        <p>{{ form.errors }}</p>
-    {% endif %}
-    <form id="ThreadPostForm" method="post" action="{% url 'thread' threadSlug page %}">
-        {% csrf_token %}
-
-        {{ form.text }}
-
-        <input type="submit" value="post" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+{% if thread.is_locked %}
+    <p>Thread is locked.</p>
 {% else %}
-    <p>Need to login to post.</p>
+    {% if user.is_authenticated %}
+        {% if form.errors %}
+            <p>{{ form.errors }}</p>
+        {% endif %}
+        <form id="ThreadPostForm" method="post" action="{% url 'thread' threadSlug page %}">
+            {% csrf_token %}
+
+            {{ form.text }}
+
+            <input type="submit" value="post" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    {% else %}
+        <p>Need to login to post.</p>
+    {% endif %}
 {% endif %}
+
 {% else %}
     <p>No thread.</p>
 {% endif %}

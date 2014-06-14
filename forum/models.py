@@ -51,6 +51,7 @@ class Thread( models.Model ):
     date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
     date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the thread.', blank= True, null= True, related_name= 'thread_edited_by' )
+    is_locked = models.BooleanField( default= False, help_text= 'if you can add new posts to the thread or not.' )
 
     def __unicode__(self):
         return self.title

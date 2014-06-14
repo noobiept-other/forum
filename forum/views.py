@@ -96,7 +96,7 @@ def open_thread( request, threadSlug, page= 0 ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
-    if request.method == 'POST':
+    if request.method == 'POST' and not theThread.is_locked:
         form = PostForm( request.POST )
 
         if form.is_valid():
@@ -687,3 +687,22 @@ def remove_user( request, username ):
     user.delete()
 
     return HttpResponseRedirect( reverse( 'index' ) )
+
+
+@must_be_moderator
+def lock_thread( request, threadSlug ):
+    """
+        Locks/unlocks the thread
+    """
+
+    try:
+        thread = Thread.objects.get( slug= threadSlug )
+
+    except Thread.DoesNotExist:
+        raise Http404( "Thread doesn't exist." )
+
+
+    thread.is_locked = not thread.is_locked
+    thread.save()
+
+    return HttpResponseRedirect( thread.get_url() )

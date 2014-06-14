@@ -55,6 +55,11 @@ ul
     display: inline;
     }
 
+.postMenu a
+    {
+    display: inline-block;
+    }
+
     /* categories */
 
 .CategoryName

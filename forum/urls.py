@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url( r'^new_category$', 'forum.views.new_category', name= 'new_category' ),
     url( r'^new_sub_forum/(?P<categorySlug>[\w-]+)$', 'forum.views.new_sub_forum', name= 'new_sub_forum' ),
 
+    url( r'^lock_thread/(?P<threadSlug>[\w-]+)$', 'forum.views.lock_thread', name= 'lock_thread' ),
+
     url( r'^edit_post/(?P<postId>\w+)$', 'forum.views.edit_post', name= 'edit_post' ),
     url( r'^edit_thread/(?P<threadSlug>[\w-]+)$', 'forum.views.edit_thread', name= 'edit_thread' ),
     url( r'^edit_category/(?P<categorySlug>[\w-]+)$', 'forum.views.edit_category', name= 'edit_category' ),
