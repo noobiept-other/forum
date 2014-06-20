@@ -7,9 +7,9 @@
 
 <h2>{{ message.title }}</h2>
 
-<p>{{ message.content }}</p>
+<p>{{ message.content|linebreaksbr }}</p>
 
 <a href="{% url 'send_message' message.sender %}">reply</a>
-<a href="{{ user.get_url }}">back</a>
+<a href="{% url 'check_message' %}">back</a>
 
 {% endblock %}
