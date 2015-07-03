@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.html import strip_tags
 
 from forum.models import Category, SubForum
 
@@ -7,11 +8,20 @@ class PostForm( forms.Form ):
 
     text = forms.CharField( max_length= 500, widget= forms.Textarea )
 
+    def clean_text(self):
+        return strip_tags( self.cleaned_data[ 'text' ] )
+
 
 class ThreadForm( forms.Form ):
 
     title = forms.CharField( max_length= 100 )
     content = forms.CharField( max_length= 500, widget= forms.Textarea )
+
+    def clean_title(self):
+        return strip_tags( self.cleaned_data[ 'title' ] )
+
+    def clean_content(self):
+        return strip_tags( self.cleaned_data[ 'content' ] )
 
 
 class CategoryForm( forms.Form ):
@@ -19,8 +29,7 @@ class CategoryForm( forms.Form ):
     category = forms.CharField( max_length= 20 )
 
     def clean_category(self):
-
-        categoryName = self.cleaned_data[ 'category' ]
+        categoryName = strip_tags( self.cleaned_data[ 'category' ] )
 
         try:
             Category.objects.get( name= categoryName )
@@ -36,8 +45,7 @@ class SubForumForm( forms.Form ):
     forumName = forms.CharField( max_length= 100 )
 
     def clean_forumName(self):
-
-        name = self.cleaned_data[ 'forumName' ]
+        name = strip_tags( self.cleaned_data[ 'forumName' ] )
 
         try:
             SubForum.objects.get( name= name )

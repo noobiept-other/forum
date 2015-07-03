@@ -1,13 +1,23 @@
-.clickableRow
-    {
-    cursor: pointer;
-    }
+    /* Base Elements */
 
 td
     {
     padding: 5px;
     min-width: 200px;
     position: relative;
+    }
+
+ul
+    {
+    list-style-type: none;
+    }
+
+
+    /* Tables */
+
+.clickableRow
+    {
+    cursor: pointer;
     }
 
 .tooltip
@@ -32,9 +42,17 @@ td
     display: inline;
     }
 
-ul
+.postMenu a
     {
-    list-style-type: none;
+    display: inline-block;
+    }
+
+
+    /* Top Menus */
+
+#Menu li
+    {
+    display: inline;
     }
 
 .PageLink
@@ -48,19 +66,13 @@ ul
     font-style: normal;
     }
 
-    /* menu */
-
-#Menu li
+#Message
     {
-    display: inline;
+    background-color: rgba(201, 219, 237, 0.83);
     }
 
-.postMenu a
-    {
-    display: inline-block;
-    }
 
-    /* categories */
+    /* Category */
 
 .CategoryName
     {
@@ -90,7 +102,8 @@ ul
     background-color: rgba(145, 198, 237, 0.3);
     }
 
-    /* sub-forums */
+
+    /* Sub-forum */
 
 #SubForumTable
     {
@@ -102,17 +115,8 @@ ul
     background-color: #e6edeb;
     }
 
-#SubForumTable th
-    {
 
-    }
-
-#SubForumTable td
-    {
-
-    }
-
-    /* threads */
+    /* Thread */
 
 .ThreadLeft
     {
@@ -163,7 +167,7 @@ ul
     }
 
 
-    /* user page */
+    /* Accounts/User Page */
 
 .UserPageTable tr:nth-child(even), #CheckMessagesTable tr:nth-child(even)
     {
@@ -180,9 +184,4 @@ ul
     padding: 5px;
     min-width: 200px;
     position: relative;
-    }
-
-#Message
-    {
-    background-color: rgba(201, 219, 237, 0.83);
     }

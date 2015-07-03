@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.utils.html import strip_tags
+
 
 class FixUserCreationForm( UserCreationForm ):
     """
@@ -68,3 +70,9 @@ class PrivateMessageForm( forms.Form ):
 
     title = forms.CharField( max_length= 100 )
     content = forms.CharField( max_length= 500, widget= forms.Textarea )
+
+    def clean_title(self):
+        return strip_tags( self.cleaned_data[ 'title' ] )
+
+    def clean_content(self):
+        return strip_tags( self.cleaned_data[ 'content' ] )
