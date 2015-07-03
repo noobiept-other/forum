@@ -15,6 +15,7 @@ class Account( AbstractUser ):
         return self.post_set.all().count()
 
 
+
 class PrivateMessage( models.Model ):
 
     receiver = models.ForeignKey( settings.AUTH_USER_MODEL )
@@ -23,7 +24,7 @@ class PrivateMessage( models.Model ):
     content = models.TextField( max_length= 500 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= timezone.now )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_url(self):

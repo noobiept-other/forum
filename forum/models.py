@@ -14,7 +14,7 @@ class Category( models.Model ):
     name = models.CharField( max_length= 100, unique= True )
     slug = models.SlugField( max_length= 100, unique= True )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -24,7 +24,7 @@ class SubForum( models.Model ):
     slug = models.SlugField( max_length= 100, unique= True )
     category = models.ForeignKey( Category )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_url(self):
@@ -59,7 +59,7 @@ class Thread( models.Model ):
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the thread.', blank= True, null= True, related_name= 'thread_edited_by' )
     is_locked = models.BooleanField( default= False, help_text= 'if you can add new posts to the thread or not.' )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_url(self):
@@ -90,8 +90,8 @@ class Post( models.Model ):
     date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= getTime )
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the post.', blank= True, null= True, related_name= 'post_edited_by' )
 
-    def __unicode__(self):
-        return self.text[:10]
+    def __str__(self):
+        return self.text[ :10 ]
 
     def get_url(self):
         position = 0

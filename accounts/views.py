@@ -52,8 +52,20 @@ def user_page( request, username ):
     except userModel.DoesNotExist:
         raise Http404( "User doesn't exist." )
 
+    posts = user.post_set.order_by( '-date_created' )
+    last_posts = posts[ :5 ]
+    total_posts = posts.count()
+
+    threads = user.thread_set.order_by( '-date_created' )
+    last_threads = threads[ :5 ]
+    total_threads = threads.count()
+
     context = {
-        'pageUser': user
+        'pageUser': user,
+        'last_posts': last_posts,
+        'total_posts': total_posts,
+        'last_threads': last_threads,
+        'total_threads': total_threads,
     }
 
     utilities.get_message( request, context )

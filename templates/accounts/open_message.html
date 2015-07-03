@@ -3,13 +3,13 @@
 
 {% block content %}
 
-<p>From <a href="{{ message.sender.get_url }}">{{ message.sender }}</a> {{ message.date_created|naturaltime }}</p>
+<p>From <a href="{{ private_message.sender.get_url }}">{{ private_message.sender }}</a> {{ private_message.date_created|naturaltime }}</p>
 
-<h2>{{ message.title }}</h2>
+<h2>{{ private_message.title }}</h2>
 
-<p>{{ message.content|linebreaksbr }}</p>
+<p>{{ private_message.content|linebreaksbr }}</p>
 
-<a href="{% url 'send_message' message.sender %}">reply</a>
-<a href="{% url 'check_message' %}">back</a>
+<a href="{% url 'accounts:send_message' private_message.sender %}">reply</a>
+<a href="{% url 'accounts:check_message' %}">back</a>
 
 {% endblock %}

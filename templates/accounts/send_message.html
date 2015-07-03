@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<h2>Send private message</h2>
+<h2>Send message to {{ username }}</h2>
 
 {% if form.errors %}
     <p>{{ form.errors }}</p>
 {% endif %}
 
-<form method="post" action="{% url 'send_message' username %}">
-    <span>{% csrf_token %}</span>
+<form method="post" action="{% url 'accounts:send_message' username %}">
+    {% csrf_token %}
 
     <table>
         <tr>

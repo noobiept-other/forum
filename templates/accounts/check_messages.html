@@ -3,6 +3,8 @@
 
 {% block content %}
 
+<h2>Private messages</h2>
+
 {% if messages %}
 
     <table id="CheckMessagesTable">
@@ -12,11 +14,11 @@
             <th>date</th>
         </tr>
         {% for message in messages %}
-            <tr class="clickableRow" data-url="{{ message.get_url }}">
+            <tr class="clickableRow contentPreview" data-url="{{ message.get_url }}" data-content="{{ message.content|linebreaksbr|truncatewords:20 }}">
                 <td><a href="{{ message.get_url }}">{{ message.sender }}</a></td>
                 <td>{{ message.title|truncatewords:20 }}</td>
                 <td>{{ message.date_created|naturaltime }}</td>
-                <td><a href="{% url 'remove_message' message.id %}">X</a></td>
+                <td><a href="{% url 'accounts:remove_message' message.id %}">X</a></td>
             </tr>
         {% endfor %}
     </table>
