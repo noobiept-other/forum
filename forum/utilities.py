@@ -2,6 +2,25 @@ import re
 from django.template.defaultfilters import slugify
 
 
+def get_message( request, context ):
+
+    """
+        Checks the session to see if there's a message, and if so adds to the context object (don't forget, it changes the object from where its called)
+    """
+
+    message = request.session.get( 'message' )
+
+    if message:
+
+        context[ 'message' ] = message
+        del request.session[ 'message' ]
+
+
+def set_message( request, message ):
+
+    request.session[ 'message' ] = message
+
+
 def unique_slugify(instance, value, slug_field_name='slug', queryset=None,
                    slug_separator='-'):
     """

@@ -3,7 +3,7 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "forum.settings")
 
 from django.conf import settings
-from forum.models import Profile
+from accounts.models import Account
 
 def startup():
     create_retired_user()
@@ -19,15 +19,15 @@ def create_retired_user():
     # userModel = get_user_model()
 
     try:
-        Profile.objects.get( username= username )
+        Account.objects.get( username= username )
 
-    except Profile.DoesNotExist:
-        user_no_more = Profile( username= username )
+    except Account.DoesNotExist:
+        user_no_more = Account( username= username )
         user_no_more.set_password( password )
         user_no_more.save()
-        print 'Retired user created: {}'.format( username )
+        print( 'Retired user created: {}'.format( username ) )
 
     else:
-        print 'Retired user already created: {}'.format( username )
+        print( 'Retired user already created: {}'.format( username ) )
 
 startup()

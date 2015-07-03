@@ -8,8 +8,8 @@ from django.conf import settings
 
 import math
 
-from forum.models import Category, SubForum, Thread, Post, PrivateMessage
-from forum.forms import PostForm, MyUserCreationForm, PrivateMessageForm, ThreadForm, CategoryForm, SubForumForm
+from forum.models import Category, SubForum, Thread, Post
+from forum.forms import PostForm, ThreadForm, CategoryForm, SubForumForm
 import forum.utilities as utilities
 from forum.decorators import must_be_moderator, must_be_staff
 
@@ -199,104 +199,6 @@ def user_page( request, username ):
     }
 
     return render( request, 'accounts/user_page.html', context )
-
-
-
-def new_account( request ):
-
-    if request.method == 'POST':
-
-        form = MyUserCreationForm( request.POST )
-
-        if form.is_valid():
-
-            form.save()
-            return HttpResponseRedirect( reverse( 'login' ) )
-
-    else:
-        form = MyUserCreationForm()
-
-    return render( request, 'accounts/new.html', { 'form': form } )
-
-
-@login_required( login_url= 'login' )
-def send_private_message( request, username ):
-
-    userModel = get_user_model()
-
-    try:
-        user = userModel.objects.get( username= username )
-
-    except userModel.DoesNotExist:
-        raise Http404( 'Invalid username.' )
-
-
-    if request.method == 'POST':
-        form = PrivateMessageForm( request.POST )
-
-        if form.is_valid():
-
-            title = form.cleaned_data[ 'title' ]
-            content = form.cleaned_data[ 'content' ]
-            message = PrivateMessage( receiver= user, sender= request.user, title= title, content= content )
-            message.save()
-
-            return HttpResponseRedirect( reverse( 'user_page',  args= [ user.username ] ) )
-
-    else:
-        form = PrivateMessageForm()
-
-    context = {
-        'form': form,
-        'username': username
-    }
-
-    return render( request, 'accounts/send_message.html', context )
-
-
-@login_required( login_url= 'login' )
-def check_message( request ):
-
-    messages = request.user.privatemessage_set.all()
-
-    context = {
-        'messages': messages
-    }
-
-    return render( request, 'accounts/check_messages.html', context )
-
-
-@login_required( login_url= 'login' )
-def open_message( request, messageId ):
-
-    try:
-        message = PrivateMessage.objects.get( id= messageId )
-
-    except PrivateMessage.DoesNotExist:
-        raise Http404( "Message doesn't exist" )
-
-    context = {
-        'message': message
-    }
-
-    return render( request, 'accounts/open_message.html', context )
-
-@login_required( login_url= 'login' )
-def remove_message( request, messageId ):
-
-    try:
-        message = PrivateMessage.objects.get( id= messageId )
-
-    except PrivateMessage.DoesNotExist:
-        raise Http404( "Message doesn't exist." )
-
-    if message.receiver != request.user:
-        return HttpResponseForbidden( "Not your message." )
-
-    message.delete()
-
-    return HttpResponseRedirect( reverse( 'check_message' ) )
-
 
 
 @must_be_moderator

@@ -1,10 +1,11 @@
-from django.conf.urls import patterns, include, url
-
-# Uncomment the next two lines to enable the admin:
+"""
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/1.8/topics/http/urls/
+"""
+from django.conf.urls import include, url
 from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
 
     url( r'^$', 'forum.views.index', name= 'index' ),
     url( r'^forum/(?P<forumSlug>[\w-]+)/(?P<page>[0-9]+)$', 'forum.views.sub_forum', name= 'subForum' ),
@@ -33,23 +34,7 @@ urlpatterns = patterns('',
     url( r'^remove/user_confirm/(?P<username>\w+)$', 'forum.views.remove_user_confirm', name= 'remove_user_confirm' ),
     url( r'^remove/user/(?P<username>\w+)$', 'forum.views.remove_user', name= 'remove_user' ),
 
-    url( r'^accounts/login$', 'django.contrib.auth.views.login', { 'template_name': 'accounts/login.html' }, name= 'login' ),
-    url( r'^accounts/logout$', 'django.contrib.auth.views.logout', name= 'logout' ),
-    url( r'^accounts/new$', 'forum.views.new_account', name= 'new_account' ),
-    url( r'^accounts/change_password$', 'django.contrib.auth.views.password_change', { 'template_name': 'accounts/change_password.html', 'post_change_redirect': '/' }, name= 'change_password' ),
 
-    url( r'^accounts/user/(?P<username>\w+)$', 'forum.views.user_page', name= 'user_page' ),
-
-    url( r'^accounts/send_message/(?P<username>\w+)$', 'forum.views.send_private_message', name= 'send_message' ),
-
-    url( r'^accounts/check_message/$', 'forum.views.check_message', name='check_message'),
-
-    url( r'^accounts/check_message/(?P<messageId>\w+)$', 'forum.views.open_message', name= 'open_message' ),
-    url( r'^accounts/remove_message/(?P<messageId>\w+)$', 'forum.views.remove_message', name= 'remove_message' ),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-)
+    url( r'^accounts/', include( 'accounts.urls', namespace= 'accounts', app_name= 'accounts' ) ),
+    url( r'^admin/', include( admin.site.urls ) ),
+]

@@ -1,4 +1,11 @@
-window.onload = function()
+var CheckMessages = (function()
+{
+function C()
+{
+
+}
+
+C.init = function()
 {
 setClickableRows();
 setContentPreview();
@@ -36,3 +43,12 @@ for (var a = 0 ; a < elements.length ; a++)
     setupTooltip( element, content );
     }
 }
+
+
+return C;
+
+}());
+
+
+window.addEventListener( 'load', CheckMessages.init, false );
+

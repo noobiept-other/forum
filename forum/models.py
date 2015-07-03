@@ -4,6 +4,11 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
 
+
+def getTime():
+    return timezone.localtime( timezone.now() )
+
+
 class Category( models.Model ):
 
     name = models.CharField( max_length= 100, unique= True )
@@ -48,9 +53,9 @@ class Thread( models.Model ):
     title = models.CharField( max_length= 100 )
     slug = models.SlugField( max_length= 100, unique= True )    # for the url
     text = models.TextField( max_length= 1000 )
-    date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
+    date_created = models.DateTimeField( help_text= 'Date Created', default= getTime )
     was_edited = models.BooleanField( default= False )
-    date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
+    date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= getTime )
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the thread.', blank= True, null= True, related_name= 'thread_edited_by' )
     is_locked = models.BooleanField( default= False, help_text= 'if you can add new posts to the thread or not.' )
 
@@ -81,8 +86,8 @@ class Post( models.Model ):
     user = models.ForeignKey( settings.AUTH_USER_MODEL )
     text = models.TextField( max_length= 1000 )
     was_edited = models.BooleanField( default= False )
-    date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
-    date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= lambda: timezone.localtime(timezone.now()) )
+    date_created = models.DateTimeField( help_text= 'Date Created', default= getTime )
+    date_edited = models.DateTimeField( help_text= 'Last time the post was edited ', default= getTime )
     edited_by = models.ForeignKey( settings.AUTH_USER_MODEL, help_text= 'who edited the post.', blank= True, null= True, related_name= 'post_edited_by' )
 
     def __unicode__(self):
@@ -107,30 +112,3 @@ class Post( models.Model ):
         url += '#post_' + str( position + 1 )
 
         return url
-
-
-class Profile( AbstractUser ):
-
-    is_moderator = models.BooleanField( default= False )
-
-    def get_url(self):
-
-        return reverse( 'user_page', args= [ self.username ] )
-
-    def get_post_count(self):
-        return self.post_set.all().count()
-
-
-class PrivateMessage( models.Model ):
-
-    receiver = models.ForeignKey( settings.AUTH_USER_MODEL )
-    sender = models.ForeignKey( settings.AUTH_USER_MODEL, related_name= 'sender' )
-    title = models.TextField( max_length= 100 )
-    content = models.TextField( max_length= 500 )
-    date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
-
-    def __unicode__(self):
-        return self.title
-
-    def get_url(self):
-        return reverse( 'open_message', args= [ self.id ] )

@@ -174,3 +174,11 @@ ul
     {
     min-width: 10px;
     }
+
+#CheckMessagesTable td
+    {
+    padding: 5px;
+    min-width: 200px;
+    position: relative;
+    }
+
