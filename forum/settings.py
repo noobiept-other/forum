@@ -145,3 +145,22 @@ RETIRED_PASSWORD = 'a'
 
 POSTS_PER_PAGE = 10     # in a thread
 THREADS_PER_PAGE = 10   # in a sub-forum
+
+
+EMOTES = {
+    ':@': STATIC_URL + 'emotes/angry.png',
+    ':S': STATIC_URL + 'emotes/confused.png',
+    'B)': STATIC_URL + 'emotes/cool.png',
+    '>(': STATIC_URL + 'emotes/crying.png',
+    ':D': STATIC_URL + 'emotes/glad.png',
+    'xD': STATIC_URL + 'emotes/grin.png',
+    'O_o': STATIC_URL + 'emotes/O_o.png',
+    ':P': STATIC_URL + 'emotes/razz.png',
+    ':(': STATIC_URL + 'emotes/sad.png',
+    ':O': STATIC_URL + 'emotes/shame.png',
+    ':)': STATIC_URL + 'emotes/smile.png',
+    ':<': STATIC_URL + 'emotes/surprised.png',
+    ':/': STATIC_URL + 'emotes/uhm.png',
+    ':|': STATIC_URL + 'emotes/unpleased.png',
+    ';)': STATIC_URL + 'emotes/wink.png',
+}

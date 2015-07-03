@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load emotes %}
 
 {% block content %}
 {% if thread %}
@@ -27,7 +28,7 @@
             {% endif %}
         </td>
         <td class="ThreadRight">
-            {{ thread.text|linebreaksbr }}
+            {{ thread.text|striptags|add_emotes|safe|linebreaksbr }}
 
             <ul class="postMenu">
                 {% if thread.was_edited %}
@@ -63,7 +64,7 @@
             {% endif %}
         </td>
         <td class="ThreadRight">
-            {{ post.text|linebreaksbr }}
+            {{ post.text|striptags|add_emotes|safe|linebreaksbr }}
 
             <ul class="postMenu">
                 {% if post.was_edited %}

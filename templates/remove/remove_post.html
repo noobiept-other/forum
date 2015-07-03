@@ -1,12 +1,25 @@
 {% extends "base.html" %}
+{% load humanize %}
+{% load emotes %}
+
 
 {% block content %}
 <h2>Remove post?</h2>
 
-<p>{{ post.text }}</p>
-<p>By: {{ post.user }}</p>
-<p>Thread: {{ post.thread }}</p>
-<p>Sub-forum: {{ post.sub_forum }}</p>
+<table id="ThreadTable">
+    <tr class="PostRow">
+        <td class="ThreadLeft">
+            <a href="{{ post.user.get_url }}">{{ post.user }}</a> {{ post.date_created|naturaltime }}<br />
+            {{ post.user.get_post_count }} posts
+        </td>
+        <td class="ThreadRight">
+            {{ post.text|striptags|linebreaksbr|add_emotes|safe }}
+        </td>
+    </tr>
+</table>
+
+
+<p><em>Thread:</em> <a href="{{ post.thread.get_url }}">{{ post.thread }}</a> <em>Sub-forum:</em> <a href="{{ post.sub_forum.get_url }}">{{ post.sub_forum }}</a></p>
 
 <p>Do you really want to remove this?</p>
 
