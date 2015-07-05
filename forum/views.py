@@ -32,7 +32,7 @@ def index( request ):
             stuff[ 'subforum' ].append({
                 'name': subForum.name,
                 'url': subForum.get_url(),
-                'threads_count': len( subForum.thread_set.all() ),
+                'threads_count': subForum.get_threads_count(),
                 'last_post': lastPost
             })
 
@@ -452,7 +452,8 @@ def remove_sub_forum_confirm( request, forumSlug ):
         raise Http404( "Sub-forum doesn't exist." )
 
     context = {
-        'forum': forum
+        'forum': forum,
+        'last_post': forum.get_last_post()
     }
 
     return render( request, 'remove/remove_sub_forum.html', context )

@@ -1,11 +1,26 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 <h2>Remove sub-forum?</h2>
 
-<p>name: {{ forum.name }}</p>
+<table id="CategoryTable">
+    <tr>
+        <td>{{ forum.name }}</td>
+        <td>threads: {{ forum.get_threads_count }}</td>
+        <td>latest post:
+            {% if last_post %}
+                {{ last_post.text|truncatechars:10 }} by {{ last_post.user }} {{ last_post.date_created|naturaltime }}
+            {% else %}
+                ---
+            {% endif %}
+        </td>
+    </tr>
+
+</table>
+
 <p>category: {{ forum.category }}</p>
-<p>With {{ forum.thread_set.all.count }} threads</p>
+
 
 <p>Do you really want to remove this?</p>
 

@@ -17,8 +17,9 @@
 {% endfor %}
 </p>
 
-
 <table id="ThreadTable">
+    <caption>{{ thread.title }}</caption>
+
     <tr id="post_0" class="ThreadRow">
         <td class="ThreadLeft">
             <a href="{{ thread.user.get_url }}">{{ thread.user }}</a> {{ thread.date_created|naturaltime }}<br />

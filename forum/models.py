@@ -11,8 +11,8 @@ def getTime():
 
 class Category( models.Model ):
 
-    name = models.CharField( max_length= 100, unique= True )
-    slug = models.SlugField( max_length= 100, unique= True )
+    name = models.CharField( max_length= 50, unique= True )
+    slug = models.SlugField( max_length= 50, unique= True )
 
     def __str__(self):
         return self.name
@@ -20,8 +20,8 @@ class Category( models.Model ):
 
 class SubForum( models.Model ):
 
-    name = models.CharField( max_length= 100, unique= True )
-    slug = models.SlugField( max_length= 100, unique= True )
+    name = models.CharField( max_length= 50, unique= True )
+    slug = models.SlugField( max_length= 50, unique= True )
     category = models.ForeignKey( Category )
 
     def __str__(self):
@@ -44,14 +44,16 @@ class SubForum( models.Model ):
 
         return latest
 
+    def get_threads_count(self):
+        return self.thread_set.count()
 
 
 class Thread( models.Model ):
 
     sub_forum = models.ForeignKey( SubForum )
     user = models.ForeignKey( settings.AUTH_USER_MODEL )
-    title = models.CharField( max_length= 100 )
-    slug = models.SlugField( max_length= 100, unique= True )    # for the url
+    title = models.CharField( max_length= 50 )
+    slug = models.SlugField( max_length= 50, unique= True )    # for the url
     text = models.TextField( max_length= 1000 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= getTime )
     was_edited = models.BooleanField( default= False )

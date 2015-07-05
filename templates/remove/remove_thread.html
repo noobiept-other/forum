@@ -1,11 +1,25 @@
 {% extends "base.html" %}
+{% load humanize %}
+{% load emotes %}
 
 {% block content %}
 <h2>Remove thread?</h2>
 
-<p>{{ thread.title }}</p>
-<p>{{ thread.text }}</p>
-<p>By: {{ thread.user }}</p>
+
+<table id="ThreadTable">
+    <caption>{{ thread.title }}</caption>
+
+    <tr id="post_0" class="ThreadRow">
+        <td class="ThreadLeft">
+            {{ thread.user }} {{ thread.date_created|naturaltime }}<br />
+            {{ thread.user.get_post_count }} posts
+        </td>
+        <td class="ThreadRight">
+            {{ thread.text|striptags|add_emotes|safe|linebreaksbr }}
+        </td>
+    </tr>
+</table>
+
 <p>Sub-forum: {{ thread.sub_forum }}</p>
 
 <p>Do you really want to remove this?</p>
