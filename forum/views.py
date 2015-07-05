@@ -407,8 +407,6 @@ def remove_post( request, postId ):
     return HttpResponseRedirect( theThread.get_url() )
 
 
-
-
 @must_be_moderator
 def remove_thread_confirm( request, threadSlug ):
 

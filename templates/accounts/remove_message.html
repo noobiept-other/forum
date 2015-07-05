@@ -9,7 +9,7 @@
 
 <p>{{ private_message.content|linebreaksbr }}</p>
 
-<a href="{% url 'accounts:message_send' private_message.sender %}">reply</a>
-<a href="{% url 'accounts:message_all' %}">back</a>
+
+<p>Remove private message? <a href="{% url 'accounts:message_remove' private_message.id %}">Yes</a> <a href="{% url 'accounts:message_all' %}">No</a></p>
 
 {% endblock %}

@@ -15,10 +15,10 @@
         </tr>
         {% for message in messages %}
             <tr class="clickableRow contentPreview" data-url="{{ message.get_url }}" data-content="{{ message.content|linebreaksbr|truncatewords:20 }}">
-                <td><a href="{{ message.get_url }}">{{ message.sender }}</a></td>
+                <td><a href="{{ message.sender.get_url }}">{{ message.sender }}</a></td>
                 <td>{{ message.title|truncatewords:20 }}</td>
                 <td>{{ message.date_created|naturaltime }}</td>
-                <td><a href="{% url 'accounts:remove_message' message.id %}">X</a></td>
+                <td><a href="{% url 'accounts:message_remove_confirm' message.id %}">X</a></td>
             </tr>
         {% endfor %}
     </table>

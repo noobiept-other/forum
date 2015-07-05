@@ -8,7 +8,7 @@
     <p>{{ form.errors }}</p>
 {% endif %}
 
-<form method="post" action="{% url 'accounts:send_message' username %}">
+<form method="post" action="{% url 'accounts:message_send' username %}">
     {% csrf_token %}
 
     <table>

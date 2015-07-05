@@ -72,8 +72,9 @@ def user_page( request, username ):
 
     return render( request, 'accounts/user_page.html', context )
 
+
 @login_required
-def send_private_message( request, username ):
+def message_send( request, username ):
 
     userModel = get_user_model()
 
@@ -110,7 +111,7 @@ def send_private_message( request, username ):
 
 
 @login_required
-def check_message( request ):
+def message_all( request ):
 
     messages = request.user.privatemessage_set.all()
 
@@ -124,7 +125,7 @@ def check_message( request ):
 
 
 @login_required
-def open_message( request, messageId ):
+def message_open( request, messageId ):
 
     try:
         message = PrivateMessage.objects.get( id= messageId )
@@ -138,22 +139,37 @@ def open_message( request, messageId ):
 
     return render( request, 'accounts/open_message.html', context )
 
+
 @login_required
-def remove_message( request, messageId ):
+def message_remove_confirm( request, messageId ):
 
     try:
-        message = PrivateMessage.objects.get( id= messageId )
+        message = request.user.privatemessage_set.get( id= messageId )
+
+    except PrivateMessage.DoesNotExist:
+        raise Http404( "Didn't find the message." )
+
+    else:
+        context = {
+            'private_message': message
+        }
+
+        return render( request, 'accounts/remove_message.html', context )
+
+
+@login_required
+def message_remove( request, messageId ):
+
+    try:
+        message = request.user.privatemessage_set.get( id= messageId )
 
     except PrivateMessage.DoesNotExist:
         raise Http404( "Message doesn't exist." )
 
-    if message.receiver != request.user:
-        return HttpResponseForbidden( "Not your message." )
-
     message.delete()
     utilities.set_message( request, 'Message removed!' )
 
-    return HttpResponseRedirect( reverse( 'accounts:check_message' ) )
+    return HttpResponseRedirect( reverse( 'accounts:message_all' ) )
 
 
 @must_be_staff

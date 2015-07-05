@@ -28,4 +28,4 @@ class PrivateMessage( models.Model ):
         return self.title
 
     def get_url(self):
-        return reverse( 'accounts:open_message', args= [ self.id ] )
+        return reverse( 'accounts:message_open', args= [ self.id ] )
