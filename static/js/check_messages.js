@@ -1,17 +1,16 @@
-var CheckMessages = (function()
-{
-function C()
-{
+var CheckMessages;
+(function(CheckMessages) {
 
-}
-
-C.init = function()
+CheckMessages.init = function()
 {
 setClickableRows();
 setContentPreview();
 };
 
 
+/**
+ * When clicking on a row, change to the location specified in a 'data-url' attribute.
+ */
 function setClickableRows()
 {
 var rows = document.querySelectorAll( '.clickableRow' );
@@ -26,6 +25,9 @@ for (var a = 0 ; a < rows.length ; a++)
 }
 
 
+/**
+ * When the mouse is over the element, show a tooltip next to the mouse, with some text (for example show the text of a thread, without having to open it).
+ */
 function setContentPreview()
 {
 var setupTooltip = function( referenceElement, content )
@@ -44,10 +46,7 @@ for (var a = 0 ; a < elements.length ; a++)
     }
 }
 
-
-return C;
-
-}());
+})(CheckMessages || (CheckMessages = {}));
 
 
 window.addEventListener( 'load', CheckMessages.init, false );
