@@ -580,20 +580,3 @@ def lock_thread( request, threadSlug ):
     thread.save()
 
     return HttpResponseRedirect( thread.get_url() )
-
-
-@must_be_staff
-def set_moderator( request, username ):
-
-    userModel = get_user_model()
-
-    try:
-        user = userModel.objects.get( username= username )
-
-    except userModel.DoesNotExist:
-        raise Http404( "User doesn't exist." )
-
-    user.is_moderator = not user.is_moderator
-    user.save()
-
-    return HttpResponseRedirect( user.get_url() )

@@ -3,8 +3,8 @@
 {% block content %}
 <h2>Remove user: {{ user_to_remove }}?</h2>
 
-<ul>
-    <li><a href="{% url 'remove_user' user_to_remove.username %}">Yes</a></li>
-    <li><a href="{{ user_to_remove.get_url }}">No</a></li>
-</ul>
+<p>
+    <a href="{% url 'remove_user' user_to_remove.username %}">Yes</a>
+    <a href="{{ user_to_remove.get_url }}">No</a>
+</p>
 {% endblock %}
