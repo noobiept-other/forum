@@ -9,7 +9,6 @@
 
         LIVE -- To know its in the live server.
         SECRET_KEY -- The secret key to be used.
-        RETIRED_PASSWORD -- The password of the retired user.
 """
 
 
@@ -138,15 +137,6 @@ LOGIN_REDIRECT_URL = '/'
 
 
 AUTH_USER_MODEL = 'accounts.Account'
-
-
-RETIRED_USERNAME = 'user_removed'
-
-if DEBUG:
-    RETIRED_PASSWORD = 'a'
-
-else:
-    RETIRED_PASSWORD = os.environ[ 'RETIRED_PASSWORD' ]
 
 
 POSTS_PER_PAGE = 10     # in a thread

@@ -30,8 +30,6 @@ urlpatterns = [
     url( r'^remove/sub_forum/(?P<forumSlug>[\w-]+)$', 'forum.views.remove_sub_forum', name= 'remove_sub_forum' ),
     url( r'^remove/category_confirm/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category_confirm', name= 'remove_category_confirm' ),
     url( r'^remove/category/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category', name= 'remove_category' ),
-    url( r'^remove/user_confirm/(?P<username>\w+)$', 'forum.views.remove_user_confirm', name= 'remove_user_confirm' ),
-    url( r'^remove/user/(?P<username>\w+)$', 'forum.views.remove_user', name= 'remove_user' ),
 
 
     url( r'^accounts/', include( 'accounts.urls', namespace= 'accounts', app_name= 'accounts' ) ),

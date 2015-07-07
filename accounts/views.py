@@ -7,7 +7,8 @@ from django.contrib.auth.views import login as django_login
 
 from accounts.forms import MyUserCreationForm, PrivateMessageForm
 from accounts.models import PrivateMessage
-from accounts.decorators import must_be_staff
+from accounts.decorators import must_be_staff, must_be_moderator
+
 from forum import utilities
 
 
@@ -20,7 +21,7 @@ def new_account( request ):
         if form.is_valid():
 
             form.save()
-            utilities.set_message( request, 'User created!' )
+            utilities.set_message( request, "User '{}' created!".format( form.cleaned_data[ 'username' ] ) )
 
             return HttpResponseRedirect( reverse( 'accounts:login' ) )
 
@@ -186,7 +187,13 @@ def set_moderator( request, username ):
     user.is_moderator = not user.is_moderator
     user.save()
 
-    utilities.set_message( request, 'Set/clear the moderator rights!' )
+    if user.is_moderator:
+        message = "'{}' is now a moderator.".format( user.username )
+
+    else:
+        message = "'{}' is not a moderator anymore.".format( user.username )
+
+    utilities.set_message( request, message )
 
     return HttpResponseRedirect( user.get_url() )
 
@@ -196,3 +203,96 @@ def password_changed( request ):
     utilities.set_message( request, 'Password changed!' )
 
     return HttpResponseRedirect( reverse( 'home' ) )
+
+
+@must_be_staff
+def remove_user_confirm( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    context = {
+        'user_to_remove': user
+    }
+
+    return render( request, 'accounts/remove_user.html', context )
+
+
+@must_be_staff
+def remove_user( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    else:
+        user.delete()
+
+        return HttpResponseRedirect( reverse( 'index' ) )
+
+
+@must_be_moderator
+def disable_user_confirm( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    else:
+        context = {
+            'user_to_disable': user
+        }
+
+        return render( request, 'accounts/disable_user.html', context )
+
+
+@must_be_moderator
+def disable_user( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    else:
+        value = not user.is_active
+
+            # only other staff users can enable/disable staff users
+        if user.is_staff:
+            if request.user.is_staff:
+                user.is_active = value
+                user.save()
+
+            else:
+                return HttpResponseForbidden( "Can't disable a staff member." )
+
+        else:
+            user.is_active = value
+            user.save()
+
+
+        if value:
+            message = "'{}' account is now active.".format( user.username )
+
+        else:
+            message = "'{}' account is now disabled.".format( user.username )
+
+        utilities.set_message( request, message )
+
+        return HttpResponseRedirect( user.get_url() )

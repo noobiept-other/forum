@@ -10,8 +10,9 @@ import math
 
 from forum.models import Category, SubForum, Thread, Post
 from forum.forms import PostForm, ThreadForm, CategoryForm, SubForumForm
-import forum.utilities as utilities
-from forum.decorators import must_be_moderator, must_be_staff
+from forum import utilities
+from accounts.decorators import must_be_moderator
+
 
 def index( request ):
 
@@ -511,54 +512,6 @@ def remove_category( request, categorySlug ):
         forum.delete()
 
     category.delete()
-
-    return HttpResponseRedirect( reverse( 'index' ) )
-
-
-@must_be_moderator
-def remove_user_confirm( request, username ):
-
-    userModel = get_user_model()
-
-    try:
-        user = userModel.objects.get( username= username )
-
-    except userModel.DoesNotExist:
-        raise Http404( "User doesn't exist." )
-
-    context = {
-        'user_to_remove': user
-    }
-
-    return render( request, 'remove/remove_user.html', context )
-
-
-@must_be_moderator
-def remove_user( request, username ):
-
-    userModel = get_user_model()
-
-    try:
-        user = userModel.objects.get( username= username )
-
-    except userModel.DoesNotExist:
-        raise Http404( "User doesn't exist." )
-
-    retiredUser = userModel.objects.get( username= settings.RETIRED_USERNAME )
-
-    for thread in user.thread_set.all():
-
-        thread.user = retiredUser
-        thread.save()
-
-    for post in user.post_set.all():
-
-        post.user = retiredUser
-        post.save()
-
-        # don't really need to save the private messages, so that will be removed
-
-    user.delete()
 
     return HttpResponseRedirect( reverse( 'index' ) )
 

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if user_to_disable.is_active %}
+    <h2>Disable user: {{ user_to_disable }}?</h2>
+{% else %}
+    <h2>Enable user: {{ user_to_disable }}?</h2>
+{% endif %}
+
+<p>
+    <a href="{% url 'accounts:disable' user_to_disable.username %}">Yes</a>
+    <a href="{{ user_to_disable.get_url }}">No</a>
+</p>
+
+{% endblock %}

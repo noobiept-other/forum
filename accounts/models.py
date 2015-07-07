@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 
+
 class Account( AbstractUser ):
 
     is_moderator = models.BooleanField( default= False )
