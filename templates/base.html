@@ -20,7 +20,7 @@
     <ul>
         <li>
         {% if user.is_authenticated %}
-            Welcome, <a href="{% url 'accounts:user_page' user.username %}">{{ user|account_type }}</a> ( <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path|urlencode }}">logout</a> )
+            Welcome, {{ user|account_name }} ( <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path|urlencode }}">logout</a> )
         {% else %}
             <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}">Login</a>
         {% endif %}

@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% load emotes %}
+{% load accounts %}
+
 
 {% block content %}
 <h2>Remove thread?</h2>
-
 
 <table id="ThreadTable">
     <caption>{{ thread.title }}</caption>
 
     <tr id="post_0" class="ThreadRow">
         <td class="ThreadLeft">
-            {{ thread.user }} {{ thread.date_created|naturaltime }}<br />
+            {{ thread.user|account_name }} {{ thread.date_created|naturaltime }}<br />
             {{ thread.user.get_post_count }} posts
         </td>
         <td class="ThreadRight">

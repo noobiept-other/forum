@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load accounts %}
 
 {% block content %}
 <h2>Remove sub-forum?</h2>
@@ -10,7 +11,7 @@
         <td>threads: {{ forum.get_threads_count }}</td>
         <td>latest post:
             {% if last_post %}
-                {{ last_post.text|truncatechars:10 }} by {{ last_post.user }} {{ last_post.date_created|naturaltime }}
+                {{ last_post.text|truncatechars:10 }} by {{ last_post.user|account_name }} {{ last_post.date_created|naturaltime }}
             {% else %}
                 ---
             {% endif %}

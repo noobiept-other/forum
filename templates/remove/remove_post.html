@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% load emotes %}
+{% load accounts %}
 
 
 {% block content %}
@@ -9,7 +10,7 @@
 <table id="ThreadTable">
     <tr class="PostRow">
         <td class="ThreadLeft">
-            <a href="{{ post.user.get_url }}">{{ post.user }}</a> {{ post.date_created|naturaltime }}<br />
+            {{ post.user|account_name }} {{ post.date_created|naturaltime }}<br />
             {{ post.user.get_post_count }} posts
         </td>
         <td class="ThreadRight">

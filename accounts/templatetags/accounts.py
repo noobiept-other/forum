@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.filter
-def account_type( user ):
+def account_name( user ):
 
     if not user.is_active:
         accountType = 'disabled'
@@ -20,4 +20,4 @@ def account_type( user ):
     else:
         accountType = 'normal'
 
-    return safe( '<span class="Accounts-{}" title="{}">{}</span>'.format( accountType, accountType, user.username ) )
+    return safe( '<a href="{}" class="Accounts-{}" title="{}">{}</a>'.format( user.get_url(), accountType, accountType, user.username ) )
