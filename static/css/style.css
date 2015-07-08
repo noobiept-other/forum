@@ -23,6 +23,11 @@ ul
     list-style-type: none;
     }
 
+footer
+    {
+    margin-top: 50px;
+    }
+
 
     /* Generic Classes */
 
@@ -229,16 +234,19 @@ ul
 .Accounts-disabled
     {
     color: gray;
+    text-decoration: underline;
     }
 
 .Accounts-moderator
     {
     color: green;
     font-weight: bold;
+    text-decoration: underline;
     }
 
 .Accounts-staff
     {
     color: brown;
     font-weight: bold;
+    text-decoration: underline;
     }

@@ -31,6 +31,7 @@ urlpatterns = [
     url( r'^remove/category_confirm/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category_confirm', name= 'remove_category_confirm' ),
     url( r'^remove/category/(?P<categorySlug>[\w-]+)$', 'forum.views.remove_category', name= 'remove_category' ),
 
+    url( r'^users_list$', 'forum.views.users_list', name= 'users_list' ),
 
     url( r'^accounts/', include( 'accounts.urls', namespace= 'accounts', app_name= 'accounts' ) ),
     url( r'^admin/', include( admin.site.urls ) ),

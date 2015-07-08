@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load accounts %}
+
+{% block content %}
+
+{% if users %}
+    <h2>Users List</h2>
+
+    <ul class="horizontalList">
+        {% for user in users %}
+            <li><a href="{{ user.get_url }}">{{ user|account_type }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No users yet.</p>
+{% endif %}
+
+{% endblock %}

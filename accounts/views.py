@@ -96,7 +96,7 @@ def message_send( request, username ):
             message = PrivateMessage( receiver= user, sender= request.user, title= title, content= content )
             message.save()
 
-            utilities.set_message( request, 'Private message sent!' )
+            utilities.set_message( request, 'Message sent to {}!'.format( user.username ) )
 
             return HttpResponseRedirect( user.get_url() )
 
@@ -235,6 +235,7 @@ def remove_user( request, username ):
         raise Http404( "User doesn't exist." )
 
     else:
+        utilities.set_message( request, "'{}' user removed!".format( user.username ) )
         user.delete()
 
         return HttpResponseRedirect( reverse( 'index' ) )

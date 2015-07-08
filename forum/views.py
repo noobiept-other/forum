@@ -42,6 +42,7 @@ def index( request ):
     context = {
         'categories': categories
     }
+    utilities.get_message( request, context )
 
     return render( request, 'index.html', context )
 
@@ -441,6 +442,7 @@ def remove_thread( request, threadSlug ):
 
     return HttpResponseRedirect( forum.get_url() )
 
+
 @must_be_moderator
 def remove_sub_forum_confirm( request, forumSlug ):
 
@@ -456,6 +458,7 @@ def remove_sub_forum_confirm( request, forumSlug ):
     }
 
     return render( request, 'remove/remove_sub_forum.html', context )
+
 
 @must_be_moderator
 def remove_sub_forum( request, forumSlug ):
@@ -533,3 +536,13 @@ def lock_thread( request, threadSlug ):
     thread.save()
 
     return HttpResponseRedirect( thread.get_url() )
+
+
+def users_list( request ):
+
+    userModel = get_user_model()
+    context = {
+        'users': userModel.objects.all()
+    }
+
+    return render( request, 'users_list.html', context )
