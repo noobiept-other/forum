@@ -24,6 +24,21 @@ ul
     }
 
 
+    /* Generic Classes */
+
+.horizontalList
+    {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    }
+
+.horizontalList li
+    {
+    display: inline-block;
+    }
+
+
     /* Tables */
 
 .clickableRow
@@ -209,4 +224,21 @@ ul
     {
     background-color: aliceblue;
     text-align: center;
+    }
+
+.Accounts-disabled
+    {
+    color: gray;
+    }
+
+.Accounts-moderator
+    {
+    color: green;
+    font-weight: bold;
+    }
+
+.Accounts-staff
+    {
+    color: brown;
+    font-weight: bold;
     }

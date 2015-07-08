@@ -137,7 +137,7 @@ def open_thread( request, threadSlug, page= 0 ):
     return render( request, 'thread.html', context )
 
 
-@login_required( login_url= 'login' )
+@login_required
 def new_thread( request, forumSlug ):
 
     try:
@@ -233,7 +233,7 @@ def new_sub_forum( request, categorySlug ):
     return render( request, 'new/new_sub_forum.html', context )
 
 
-@login_required( login_url= 'login' )
+@login_required
 def edit_post( request, postId ):
 
     try:
@@ -272,7 +272,7 @@ def edit_post( request, postId ):
     return render( request, 'edit/edit_post.html', context )
 
 
-@login_required( login_url= 'login' )
+@login_required
 def edit_thread( request, threadSlug ):
 
     try:

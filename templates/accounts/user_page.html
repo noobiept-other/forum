@@ -1,32 +1,41 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load accounts %}
 
 {% block content %}
 
 <h2>
-    Username: {{ pageUser.username }}
+    Username: {{ pageUser|account_type }}
 
-    {% if user.is_moderator or user.is_staff %}
-        <a href="{% url 'accounts:disable_confirm' pageUser.username %}">
-            {% if pageUser.is_active %}
-                disable
-            {% else %}
-                enable
-            {% endif %}
-        </a>
-    {% endif %}
 
-    {% if user.is_staff %}
-        <a href="{% url 'accounts:set_moderator' pageUser.username %}">
-            {% if pageUser.is_moderator %}
-                un-mod
-            {% else %}
-                mod
-            {% endif %}
-        </a>
+    <ul class="horizontalList">
+        {% if user.is_moderator or user.is_staff %}
+        <li>
+            <a href="{% url 'accounts:disable_confirm' pageUser.username %}">
+                {% if pageUser.is_active %}
+                    disable
+                {% else %}
+                    enable
+                {% endif %}
+            </a>
+        </li>
+        {% endif %}
 
-        <a href="{% url 'accounts:remove_confirm' pageUser.username %}">remove</a>
-    {% endif %}
+        {% if user.is_staff %}
+        <li>
+            <a href="{% url 'accounts:set_moderator' pageUser.username %}">
+                {% if pageUser.is_moderator %}
+                    un-mod
+                {% else %}
+                    mod
+                {% endif %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'accounts:remove_confirm' pageUser.username %}">remove</a>
+        </li>
+        {% endif %}
+    </ul>
 </h2>
 
 <p>Joined: {{ pageUser.date_joined }} ({{ pageUser.date_joined|naturaltime }})</p>

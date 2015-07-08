@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load accounts %}
 
 {% block content %}
 
@@ -28,11 +29,11 @@
     {% for thread in threads %}
         <tr class="clickableRow contentPreview" data-url="{{ thread.get_url }}" data-content="{{ thread.text|truncatechars:20 }}">
             <td><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:20 }}</a></td>
-            <td>by <a href="{% url 'accounts:user_page' thread.user.username %}">{{ thread.user }}</a></td>
+            <td>by <a href="{% url 'accounts:user_page' thread.user.username %}">{{ thread.user|account_type }}</a></td>
             <td>posts: {{ thread.get_post_count }}</td>
             <td>lastest post:
                 {% if thread.get_last_post %}
-                    <a href="{{ thread.get_last_post.get_url }}">{{ thread.get_last_post.text|truncatechars:10 }}</a> by <a href="{% url 'accounts:user_page' thread.get_last_post.user.username %}">{{ thread.get_last_post.user }}</a> {{ thread.get_last_post.date_created|naturaltime }}
+                    <a href="{{ thread.get_last_post.get_url }}">{{ thread.get_last_post.text|truncatechars:10 }}</a> by <a href="{% url 'accounts:user_page' thread.get_last_post.user.username %}">{{ thread.get_last_post.user|account_type }}</a> {{ thread.get_last_post.date_created|naturaltime }}
                 {% else %}
                     ---
                 {% endif %}
