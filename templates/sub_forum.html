@@ -6,7 +6,7 @@
 
 <p>
     <a href="{% url 'new_thread' forumSlug %}">New Thread</a>
-    {% if user.is_moderator %}
+    {% if user.is_staff %}
         <a href="{% url 'edit_sub_forum' forumSlug %}">edit</a>
         <a href="{% url 'remove_sub_forum_confirm' forumSlug %}">remove</a>
     {% endif %}

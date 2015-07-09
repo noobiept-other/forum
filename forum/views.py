@@ -11,7 +11,7 @@ import math
 from forum.models import Category, SubForum, Thread, Post
 from forum.forms import PostForm, ThreadForm, CategoryForm, SubForumForm
 from forum import utilities
-from accounts.decorators import must_be_moderator
+from accounts.decorators import must_be_moderator, must_be_staff
 
 
 def index( request ):
@@ -86,6 +86,7 @@ def sub_forum( request, forumSlug, page= 0 ):
         'pages': range( 0, totalPages ),
         'paths': [ forum ]
     }
+    utilities.get_message( request, context )
 
     return render( request, 'sub_forum.html', context )
 
@@ -134,6 +135,7 @@ def open_thread( request, threadSlug, page= 0 ):
         'form': form,
         'paths': [ theThread.sub_forum, theThread ]
     }
+    utilities.get_message( request, context )
 
     return render( request, 'thread.html', context )
 
@@ -174,7 +176,7 @@ def new_thread( request, forumSlug ):
     return render( request, 'new/new_thread.html', context )
 
 
-@must_be_moderator
+@must_be_staff
 def new_category( request ):
 
     if request.method == 'POST':
@@ -199,7 +201,7 @@ def new_category( request ):
     return render( request, 'new/new_category.html', context )
 
 
-@must_be_moderator
+@must_be_staff
 def new_sub_forum( request, categorySlug ):
 
     try:
@@ -243,7 +245,7 @@ def edit_post( request, postId ):
     except Post.DoesNotExist:
         raise Http404( "Post doesn't exist." )
 
-    if request.user != post.user and not request.user.is_moderator:
+    if request.user != post.user and not request.user.has_moderator_rights():
         return HttpResponseForbidden( "Not your post (and not a moderator)." )
 
 
@@ -282,7 +284,7 @@ def edit_thread( request, threadSlug ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
-    if request.user != theThread.user and not request.user.is_moderator:
+    if request.user != theThread.user and not request.user.has_moderator_rights():
         return HttpResponseForbidden( "Not your thread (and not a moderator)." )
 
 
@@ -314,7 +316,7 @@ def edit_thread( request, threadSlug ):
     return render( request, 'edit/edit_thread.html', context )
 
 
-@must_be_moderator
+@must_be_staff
 def edit_category( request, categorySlug ):
 
     try:
@@ -346,7 +348,7 @@ def edit_category( request, categorySlug ):
     return render( request, 'edit/edit_category.html', context )
 
 
-@must_be_moderator
+@must_be_staff
 def edit_sub_forum( request, forumSlug ):
 
     try:
@@ -403,6 +405,7 @@ def remove_post( request, postId ):
     except Post.DoesNotExist:
         raise Http404( "Post doesn't exist." )
 
+    utilities.set_message( request, "Post removed!" )
     theThread = post.thread
     post.delete()
 
@@ -434,16 +437,15 @@ def remove_thread( request, threadSlug ):
     except Thread.DoesNotExist:
         raise Http404( "Thread doesn't exist." )
 
-    for post in thread.post_set.all():
-        post.delete()
+    utilities.set_message( request, "'{}' thread removed!".format( thread.title ) )
+    url = thread.sub_forum.get_url()
 
-    forum = thread.sub_forum
     thread.delete()
 
-    return HttpResponseRedirect( forum.get_url() )
+    return HttpResponseRedirect( url )
 
 
-@must_be_moderator
+@must_be_staff
 def remove_sub_forum_confirm( request, forumSlug ):
 
     try:
@@ -460,7 +462,7 @@ def remove_sub_forum_confirm( request, forumSlug ):
     return render( request, 'remove/remove_sub_forum.html', context )
 
 
-@must_be_moderator
+@must_be_staff
 def remove_sub_forum( request, forumSlug ):
 
     try:
@@ -469,18 +471,13 @@ def remove_sub_forum( request, forumSlug ):
     except SubForum.DoesNotExist:
         raise Http404( "Sub-forum doesn't exist." )
 
-    for thread in forum.thread_set.all():
-        for post in thread.post_set.all():
-            post.delete()
-
-        thread.delete()
-
+    utilities.set_message( request, "'{}' sub-forum removed!".format(  forum.name ) )
     forum.delete()
 
     return HttpResponseRedirect( reverse( 'index' ) )
 
 
-@must_be_moderator
+@must_be_staff
 def remove_category_confirm( request, categorySlug ):
 
     try:
@@ -496,7 +493,7 @@ def remove_category_confirm( request, categorySlug ):
     return render( request, 'remove/remove_category.html', context )
 
 
-@must_be_moderator
+@must_be_staff
 def remove_category( request, categorySlug ):
 
     try:
@@ -505,15 +502,7 @@ def remove_category( request, categorySlug ):
     except Category.DoesNotExist:
         raise Http404( "Category doesn't exist." )
 
-    for forum in category.subforum_set.all():
-        for thread in forum.thread_set.all():
-            for post in thread.post_set.all():
-                post.delete()
-
-            thread.delete()
-
-        forum.delete()
-
+    utilities.set_message( request, "'{}' category removed!".format(  category.name ) )
     category.delete()
 
     return HttpResponseRedirect( reverse( 'index' ) )
@@ -534,6 +523,14 @@ def lock_thread( request, threadSlug ):
 
     thread.is_locked = not thread.is_locked
     thread.save()
+
+    if thread.is_locked:
+        message = 'Thread locked!'
+
+    else:
+        message = 'Thread unlocked!'
+
+    utilities.set_message( request, message )
 
     return HttpResponseRedirect( thread.get_url() )
 

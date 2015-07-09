@@ -15,7 +15,7 @@
     {% for category in categories %}
 
         <h2 class="CategoryName">{{ category.name }}</h2>
-        {% if user.is_moderator %}
+        {% if user.is_staff %}
             <p>
                 <a href="{% url 'new_sub_forum' category.slug %}">New sub-forum</a>
                 <a href="{% url 'edit_category' category.slug %}">edit</a>

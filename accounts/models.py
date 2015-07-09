@@ -15,6 +15,11 @@ class Account( AbstractUser ):
     def get_post_count(self):
         return self.post_set.all().count()
 
+    def has_moderator_rights(self):
+        if self.is_staff or self.is_moderator:
+            return True
+
+        return False
 
 
 class PrivateMessage( models.Model ):

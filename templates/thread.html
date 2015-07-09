@@ -31,13 +31,13 @@
 
             <ul class="postMenu">
                 {% if thread.was_edited %}
-                    <li>edited by <a href="{{ thread.edited_by.get_url }}">{{ thread.edited_by }}</a>: {{ thread.date_edited|naturaltime }}</li>
+                    <li>edited by {{ thread.edited_by|account_name }}: {{ thread.date_edited|naturaltime }}</li>
                 {% endif %}
 
-                {% if user == thread.user or user.is_moderator %}
+                {% if user == thread.user or user.has_moderator_rights %}
                     <li><a href="{% url 'edit_thread' thread.slug %}">edit</a></li>
                 {% endif %}
-                {% if user.is_moderator %}
+                {% if user.has_moderator_rights %}
                     <li><a href="{% url 'lock_thread' thread.slug %}">
                         {% if thread.is_locked %}
                             unlock
@@ -64,13 +64,13 @@
 
             <ul class="postMenu">
                 {% if post.was_edited %}
-                    <li>edited by <a href="{{ post.edited_by.get_url }}">{{ post.edited_by }}</a>: {{ post.date_edited|naturaltime }}</li>
+                    <li>edited by {{ post.edited_by|account_name }}: {{ post.date_edited|naturaltime }}</li>
                 {% endif %}
 
-                {% if user == post.user or user.is_moderator %}
+                {% if user == post.user or user.has_moderator_rights %}
                     <li><a href="{% url 'edit_post' post.id %}">edit</a></li>
                 {% endif %}
-                {% if user.is_moderator %}
+                {% if user.has_moderator_rights %}
                     <li><a href="{% url 'remove_post_confirm' post.id %}">remove</a></li>
                 {% endif %}
             </ul>
