@@ -37,7 +37,7 @@ else:
     SECRET_KEY = os.environ[ 'SECRET_KEY' ]
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'forum111.herokuapp.com', 'forum111.heroku.com' ]
 
 
 INSTALLED_APPS = (

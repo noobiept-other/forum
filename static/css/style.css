@@ -82,9 +82,10 @@ footer
 
     /* Top Menus */
 
-#Menu li
+#Menu ul
     {
-    display: inline;
+    display: block;
+    margin: 15px;
     }
 
 .PageLink
