@@ -129,10 +129,10 @@ def message_all( request ):
 def message_open( request, messageId ):
 
     try:
-        message = PrivateMessage.objects.get( id= messageId )
+        message = request.user.privatemessage_set.get( id= messageId )
 
     except PrivateMessage.DoesNotExist:
-        raise Http404( "Message doesn't exist" )
+        raise Http404( "Couldn't find that message." )
 
     context = {
         'private_message': message

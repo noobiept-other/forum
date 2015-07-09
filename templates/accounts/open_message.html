@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load accounts %}
 
 {% block content %}
 
-<p>From <a href="{{ private_message.sender.get_url }}">{{ private_message.sender }}</a> {{ private_message.date_created|naturaltime }}</p>
+<p>From {{ private_message.sender|account_name }} {{ private_message.date_created|naturaltime }}</p>
 
 <h2 id="PrivateMessage-title">{{ private_message.title }}</h2>
 
