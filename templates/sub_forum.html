@@ -27,8 +27,8 @@
 {% if threads %}
     <table id="SubForumTable">
     {% for thread in threads %}
-        <tr class="clickableRow contentPreview" data-url="{{ thread.get_url }}" data-content="{{ thread.text|truncatechars:20 }}">
-            <td><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:20 }}</a></td>
+        <tr class="clickableRow contentPreview" data-url="{{ thread.get_url }}" data-content="{{ thread.text|truncatechars:50 }}">
+            <td><a href="{{ thread.get_url }}">{{ thread.title|truncatechars:30 }}</a></td>
             <td>by {{ thread.user|account_name }}</td>
             <td>posts: {{ thread.get_post_count }}</td>
             <td>lastest post:
