@@ -1,7 +1,5 @@
 A forum written with django.
 
-You can try it out here: [http://forum111.herokuapp.com](http://forum111.herokuapp.com)
-
 
 Emotes
 ======
